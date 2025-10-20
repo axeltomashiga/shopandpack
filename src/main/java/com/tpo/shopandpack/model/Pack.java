@@ -5,8 +5,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import lombok.Data;
 
 @Entity
+@Data
 @Table(name = "packs")
 public class Pack {
     
@@ -59,20 +61,10 @@ public class Pack {
         return stickers.size() == 5;
     }
     
-    // Getters y Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
-    
-    public Album getAlbum() { return album; }
-    public void setAlbum(Album album) { this.album = album; }
-    
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    
-    public List<Sticker> getStickers() { return new ArrayList<>(stickers); }
-    public void setStickers(List<Sticker> stickers) { this.stickers = stickers; }
+    // Método personalizado para getStickers que mantiene la immutabilidad
+    public List<Sticker> getStickers() { 
+        return new ArrayList<>(stickers); 
+    }
     
     @Override
     public boolean equals(Object o) {

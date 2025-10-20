@@ -1,10 +1,13 @@
 package com.tpo.shopandpack.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
+@Data
 @Table(name = "user_stickers")
 public class UserSticker {
     
@@ -24,6 +27,7 @@ public class UserSticker {
     private Estado estado;
     
     @Column(name = "created_at")
+    @Setter(lombok.AccessLevel.NONE) // CreatedAt es inmutable
     private LocalDateTime createdAt;
     
     public enum Estado {
@@ -47,21 +51,6 @@ public class UserSticker {
     public void cambiarEstado(Estado nuevoEstado) {
         this.estado = nuevoEstado;
     }
-    
-    // Getters y Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
-    
-    public Sticker getSticker() { return sticker; }
-    public void setSticker(Sticker sticker) { this.sticker = sticker; }
-    
-    public Estado getEstado() { return estado; }
-    public void setEstado(Estado estado) { this.estado = estado; }
-    
-    public LocalDateTime getCreatedAt() { return createdAt; }
     
     @Override
     public boolean equals(Object o) {

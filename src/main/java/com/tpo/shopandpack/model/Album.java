@@ -1,12 +1,15 @@
 package com.tpo.shopandpack.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Data
 @Table(name = "albums")
 public class Album {
     
@@ -31,6 +34,7 @@ public class Album {
     private Boolean publicado = false;
     
     @Column(name = "created_at")
+    @Setter(lombok.AccessLevel.NONE) // CreatedAt es inmutable
     private LocalDateTime createdAt;
     
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -56,36 +60,6 @@ public class Album {
         this.creadorAdmin = creadorAdmin;
         this.totalFiguritas = totalFiguritas;
     }
-    
-    // Getters y Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    
-    public String getTitulo() { return titulo; }
-    public void setTitulo(String titulo) { this.titulo = titulo; }
-    
-    public String getDescripcion() { return descripcion; }
-    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
-    
-    public String getCategoria() { return categoria; }
-    public void setCategoria(String categoria) { this.categoria = categoria; }
-    
-    public Dificultad getDificultad() { return dificultad; }
-    public void setDificultad(Dificultad dificultad) { this.dificultad = dificultad; }
-    
-    public User getCreadorAdmin() { return creadorAdmin; }
-    public void setCreadorAdmin(User creadorAdmin) { this.creadorAdmin = creadorAdmin; }
-    
-    public Integer getTotalFiguritas() { return totalFiguritas; }
-    public void setTotalFiguritas(Integer totalFiguritas) { this.totalFiguritas = totalFiguritas; }
-    
-    public Boolean getPublicado() { return publicado; }
-    public void setPublicado(Boolean publicado) { this.publicado = publicado; }
-    
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    
-    public List<Sticker> getStickers() { return stickers; }
-    public void setStickers(List<Sticker> stickers) { this.stickers = stickers; }
     
     @Override
     public boolean equals(Object o) {
