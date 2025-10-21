@@ -34,7 +34,7 @@ public class AlbumController {
             if (publicado != null) {
                 albums = albums.stream()
                         .filter(a -> publicado.equals(a.getPublicado()))
-                        .toList();
+                        .collect(java.util.stream.Collectors.toList());
             }
             return ResponseEntity.ok(albums);
         }

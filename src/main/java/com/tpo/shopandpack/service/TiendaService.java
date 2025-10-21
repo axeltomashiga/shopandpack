@@ -1,8 +1,11 @@
 package com.tpo.shopandpack.service;
 
+import com.tpo.shopandpack.dto.CompraDTO;
 import com.tpo.shopandpack.exception.ResourceNotFoundException;
 import com.tpo.shopandpack.model.Album;
 import com.tpo.shopandpack.model.Pack;
+import com.tpo.shopandpack.model.Adapter.IPagoAdapter;
+import com.tpo.shopandpack.model.Factory.PagoFactory;
 import com.tpo.shopandpack.repository.AlbumRepository;
 import com.tpo.shopandpack.repository.PackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,9 @@ public class TiendaService {
     
     @Autowired
     private AlbumRepository albumRepository;
+
+    @Autowired
+    private PagoService pagoService;
     
     /**
      * Obtiene todos los packs de la tienda (para vista administrativa o histórico).
@@ -63,7 +69,15 @@ public class TiendaService {
     }
     
     // Métodos futuros para lógica de compra:
-    // public CompraResult comprarPaquete(Long userId, Long albumId) { ... }
+    public Pack comprarPaquete(CompraDTO compraDTO) { 
+        try {
+            pagoService.procesarPago(compraDTO);
+            return getPackById(compraDTO.getAlbumId());
+        } catch (Exception e) {
+            System.out.println("Error procesando el pago");
+        }
+        return null; // Implementar
+    }
     // public List<Pack> getPacksByUser(Long userId) { ... }
     // public EstadisticasCompra getEstadisticasUsuario(Long userId) { ... }
 }
