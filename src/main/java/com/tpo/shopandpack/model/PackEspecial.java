@@ -1,22 +1,31 @@
 package com.tpo.shopandpack.model;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import com.tpo.shopandpack.infrastructure.IPack;
+import jakarta.persistence.Id;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "packs")
-public class Pack implements IPack {
-    
+@Table(name = "packs_especial")
+public class PackEspecial implements IPack{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -38,12 +47,12 @@ public class Pack implements IPack {
     private List<Sticker> stickers = new ArrayList<>();
     
     // Constructor por defecto
-    public Pack() {
+    public PackEspecial() {
         this.createdAt = LocalDateTime.now();
     }
     
     // Constructor
-    public Pack(User user, Album album) {
+    public PackEspecial(User user, Album album) {
         this();
         this.user = user;
         this.album = album;
@@ -83,6 +92,6 @@ public class Pack implements IPack {
 
     @Override
     public String getTipo() {
-        return "BASICO";
+        return "ESPECIAL";
     }
 }
