@@ -1,5 +1,6 @@
 package com.tpo.shopandpack.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Setter;
@@ -38,6 +39,7 @@ public class Album {
     private LocalDateTime createdAt;
     
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference("album-stickers")
     private List<Sticker> stickers = new ArrayList<>();
     
     public enum Dificultad {

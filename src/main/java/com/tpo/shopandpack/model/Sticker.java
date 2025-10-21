@@ -1,5 +1,6 @@
 package com.tpo.shopandpack.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -16,6 +17,7 @@ public class Sticker {
     
     @ManyToOne
     @JoinColumn(name = "album_id", nullable = false)
+    @JsonBackReference("album-stickers")
     private Album album;
     
     @Column(nullable = false)

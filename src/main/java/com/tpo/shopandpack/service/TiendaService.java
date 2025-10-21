@@ -7,7 +7,7 @@ import com.tpo.shopandpack.model.Pack;
 import com.tpo.shopandpack.model.Adapter.IPagoAdapter;
 import com.tpo.shopandpack.model.Factory.PagoFactory;
 import com.tpo.shopandpack.repository.AlbumRepository;
-import com.tpo.shopandpack.repository.PackageRepository;
+import com.tpo.shopandpack.repository.PackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +24,7 @@ import java.util.List;
 public class TiendaService {
     
     @Autowired
-    private PackageRepository packRepository;
+    private PackRepository packRepository;
     
     @Autowired
     private AlbumRepository albumRepository;
@@ -69,10 +69,10 @@ public class TiendaService {
     }
     
     // Métodos futuros para lógica de compra:
-    public Pack comprarPaquete(CompraDTO compraDTO) { 
+    public Pack comprarPaquete(Long albumId, CompraDTO compraDTO) { 
         try {
             pagoService.procesarPago(compraDTO);
-            return getPackById(compraDTO.getAlbumId());
+            return getPackById(albumId);
         } catch (Exception e) {
             System.out.println("Error procesando el pago");
         }

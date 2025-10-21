@@ -1,5 +1,6 @@
 package com.tpo.shopandpack.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ public class Pack {
         joinColumns = @JoinColumn(name = "pack_id"),
         inverseJoinColumns = @JoinColumn(name = "sticker_id")
     )
+    @JsonIgnoreProperties("album")
     private List<Sticker> stickers = new ArrayList<>();
     
     // Constructor por defecto

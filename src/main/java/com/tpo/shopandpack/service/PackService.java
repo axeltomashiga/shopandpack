@@ -3,7 +3,7 @@ package com.tpo.shopandpack.service;
 import com.tpo.shopandpack.exception.BusinessException;
 import com.tpo.shopandpack.exception.ResourceNotFoundException;
 import com.tpo.shopandpack.model.Pack;
-import com.tpo.shopandpack.repository.PackageRepository;
+import com.tpo.shopandpack.repository.PackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +15,7 @@ import java.util.List;
 public class PackService {
     
     @Autowired
-    private PackageRepository packRepository;
+    private PackRepository packRepository;
     
     public List<Pack> findAll() {
         return packRepository.findAll();

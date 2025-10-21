@@ -1,5 +1,6 @@
 package com.tpo.shopandpack.controller;
 
+import com.tpo.shopandpack.dto.CompraDTO;
 import com.tpo.shopandpack.model.Album;
 import com.tpo.shopandpack.model.Pack;
 import com.tpo.shopandpack.service.TiendaService;
@@ -61,6 +62,8 @@ public class TiendaController {
     }
     
     // Endpoint futuro para lógica de compra:
-    // @PostMapping("/albums/{albumId}/comprar")
-    // public ResponseEntity<Pack> comprarPack(@PathVariable Long albumId, @RequestParam Long userId) { ... }
+    @PostMapping("/albums/{albumId}/comprar")
+    public ResponseEntity<Pack> comprarPack(@PathVariable Long albumId, @RequestBody CompraDTO compraDTO) {
+        return ResponseEntity.ok(tiendaService.comprarPaquete(albumId, compraDTO));
+    }
 }

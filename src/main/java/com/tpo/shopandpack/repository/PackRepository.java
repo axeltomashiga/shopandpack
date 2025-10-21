@@ -4,4 +4,4 @@ import com.tpo.shopandpack.model.Pack;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PackageRepository extends JpaRepository<Pack, Long>{}
+public interface PackRepository extends JpaRepository<Pack, Long>{}
