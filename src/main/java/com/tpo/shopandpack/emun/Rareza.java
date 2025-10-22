@@ -1,17 +1,17 @@
 package com.tpo.shopandpack.emun;
 
 public enum Rareza {
-    COMUN(70),    // 70% probabilidad
-    RARA(25),     // 25% probabilidad  
-    EPICA(5);     // 5% probabilidad
+    COMUN(200),
+    RARA(100),  
+    EPICA(50);
     
-    private final int probabilidad;
+    private final int stock_inicial;
     
-    Rareza(int probabilidad) {
-        this.probabilidad = probabilidad;
+    Rareza(int stock_inicial) {
+        this.stock_inicial = stock_inicial;
     }
     
     public int getProbabilidad() {
-        return probabilidad;
+        return stock_inicial;
     }
 }

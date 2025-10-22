@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.tpo.shopandpack.service.TiendaService;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -21,10 +20,15 @@ public class TiendaController {
     private TiendaService tiendaService;
 
     @GetMapping("/albums/{id}/packs")
-    public ResponseEntity<String> comprarPaquete(){
-        String pack = tiendaService.comprarPaquete();
+    public ResponseEntity<PackDTO> comprarPaquete(){
+        PackDTO pack = tiendaService.comprarPaquete();
         return ResponseEntity.status(HttpStatus.CREATED).body(pack);
 
     }
 
+    @GetMapping("/albums/{albumId}/price")
+    public ResponseEntity<Double> obtenerPrecio(){
+        Double precio = tiendaService.obtenerPrecio();
+        return ResponseEntity.status(HttpStatus.OK).body(precio);
+    }
 }
