@@ -1,7 +1,5 @@
 package com.tpo.shopandpack.service;
 
-import com.tpo.shopandpack.dto.PackDTO;
-
 import com.tpo.shopandpack.model.Pack;
 
 import org.springframework.stereotype.Service;
@@ -11,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class TiendaService {
 
-    public PackDTO comprarPaquete() {
-        PackDTO pack = new PackDTO();
+    public Pack comprarPaquete(Long albumId) {
+        Pack pack = new Pack();
         pack.setId(1L);
         return pack;
     }

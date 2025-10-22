@@ -1,6 +1,6 @@
 package com.tpo.shopandpack.controller;
 
-import com.tpo.shopandpack.dto.PackDTO;
+import com.tpo.shopandpack.model.Pack;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.tpo.shopandpack.service.TiendaService;
-import org.springframework.web.bind.annotation.GetMapping;
 
 
 
@@ -20,10 +19,9 @@ public class TiendaController {
     private TiendaService tiendaService;
 
     @GetMapping("/albums/{id}/packs")
-    public ResponseEntity<PackDTO> comprarPaquete(){
-        PackDTO pack = tiendaService.comprarPaquete();
+    public ResponseEntity<?> comprarPaquete(@PathVariable Long albumId){
+        Pack pack = tiendaService.comprarPaquete(albumId);
         return ResponseEntity.status(HttpStatus.CREATED).body(pack);
-
     }
 
     @GetMapping("/albums/{albumId}/price")
