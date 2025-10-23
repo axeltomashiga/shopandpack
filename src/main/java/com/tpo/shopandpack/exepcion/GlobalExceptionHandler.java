@@ -23,8 +23,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(NotStickersAvailables.class)
-    public ResponseEntity<ErrorResponse> NotStickersAvailables(NotStickersAvailables ex) {
+    @ExceptionHandler(NotStickersAvailable.class)
+    public ResponseEntity<ErrorResponse> NotStickersAvailables(NotStickersAvailable ex) {
         ErrorResponse error = new ErrorResponse(
             HttpStatus.NOT_FOUND.value(),
             ex.getMessage(),
