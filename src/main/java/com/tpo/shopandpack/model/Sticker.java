@@ -6,6 +6,8 @@ import lombok.Data;
 
 import java.util.Objects;
 
+import org.hibernate.annotations.Check;
+
 @Entity
 @Data
 @Table(name = "stickers")
@@ -24,36 +26,20 @@ public class Sticker {
     private String nombre;
     
     private Integer numero;
-    
-    @Enumerated(EnumType.STRING)
-    private Rareza rareza;
-    
+
+    @Check(constraints = "rareza IN ('COMUN', 'RARA', 'EPICA')")
+    private String rareza;
     private Integer stockTotal;
     private Integer stockDisponible;
     private String imagenUrl;
-    
-    public enum Rareza {
-        COMUN(70),    // 70% probabilidad
-        RARA(25),     // 25% probabilidad  
-        EPICA(5);     // 5% probabilidad
-        
-        private final int probabilidad;
-        
-        Rareza(int probabilidad) {
-            this.probabilidad = probabilidad;
-        }
-        
-        public int getProbabilidad() {
-            return probabilidad;
-        }
-    }
+
     
     // Constructor por defecto
     public Sticker() {}
     
     // Constructor
     public Sticker(Album album, String nombre, Integer numero, 
-                   Rareza rareza, Integer stockTotal, String imagenUrl) {
+                   String rareza, Integer stockTotal, String imagenUrl) {
         this.album = album;
         this.nombre = nombre;
         this.numero = numero;

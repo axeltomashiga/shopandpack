@@ -5,6 +5,7 @@ import com.tpo.shopandpack.exception.ResourceNotFoundException;
 import com.tpo.shopandpack.model.Sticker;
 import com.tpo.shopandpack.repository.StickerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,6 +73,30 @@ public class StickerService {
         }
         stickerRepository.deleteById(id);
     }
+    
+
+
+    public List<Sticker> encontrarStickersPorStock(int stockTotal, int stockTotal2) {
+        return stickerRepository.findAll().stream()
+                .filter(s -> s.getStockTotal() != null && s.getStockTotal() >= stockTotal 
+                        && s.getStockTotal() <= stockTotal2
+                        && s.getStockDisponible() != null && s.getStockDisponible() > 0).toList();
+    }
+    
+    public List<Sticker> encontrarStickers() {
+        return stickerRepository.findAll().stream()
+                .filter(s -> s.getStockTotal() != null && s.getStockTotal() > 0
+                        && s.getStockDisponible() != null && s.getStockDisponible() > 0)
+                .toList();
+    }
+
+    public List<Sticker> findByAlbumIdAndStockDisponibleGreaterThan(Long albumId, Integer stock) {
+        return stickerRepository.findAll().stream()
+                .filter(s -> s.getAlbum() != null && s.getAlbum().getId().equals(albumId)
+                        && s.getStockDisponible() != null && s.getStockDisponible() > stock)
+                .toList();
+    }
+    
     
     private void validateSticker(Sticker sticker) {
         if (sticker.getNombre() == null || sticker.getNombre().trim().isEmpty()) {

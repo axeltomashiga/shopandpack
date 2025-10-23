@@ -1,6 +1,8 @@
 package com.tpo.shopandpack.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.tpo.shopandpack.model.Strategy.IProbabilidadStickerStrategy;
+
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -36,6 +38,9 @@ public class Pack {
     )
     @JsonIgnoreProperties("album")
     private List<Sticker> stickers = new ArrayList<>();
+
+    @Transient
+    private IProbabilidadStickerStrategy estrategiaProbabilidad;
     
     // Constructor por defecto
     public Pack() {
@@ -48,13 +53,22 @@ public class Pack {
         this.user = user;
         this.album = album;
     }
-    
+
+    public IProbabilidadStickerStrategy getEstrategiaProbabilidad() {
+        return estrategiaProbabilidad;
+    }
+
+    public void setEstrategiaProbabilidad(IProbabilidadStickerStrategy estrategiaProbabilidad) {
+        this.estrategiaProbabilidad = estrategiaProbabilidad;
+    }
+
     // Método de negocio para agregar figurita al paquete
-    public void agregarSticker(Sticker sticker) {
-        if (stickers.size() < 5) { // Máximo 5 figuritas por paquete
-            stickers.add(sticker);
-        } else {
-            throw new IllegalStateException("El paquete ya tiene 5 figuritas");
+    public void agregarSticker() {
+        if (this.album != null && this.estrategiaProbabilidad != null) {
+            this.stickers.addAll(estrategiaProbabilidad.listarStickers(this.album));
+        } else if (this.estrategiaProbabilidad != null) {
+            // Fallback al método original si no hay álbum
+            this.stickers.addAll(estrategiaProbabilidad.listarStickers());
         }
     }
     
@@ -66,6 +80,10 @@ public class Pack {
     // Método personalizado para getStickers que mantiene la immutabilidad
     public List<Sticker> getStickers() { 
         return new ArrayList<>(stickers); 
+    }
+
+    public void reducirStockStickers() {
+        this.stickers.forEach(sticker -> sticker.reducirStock(1));
     }
     
     @Override
