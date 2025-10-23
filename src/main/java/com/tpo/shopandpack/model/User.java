@@ -1,5 +1,7 @@
 package com.tpo.shopandpack.model;
 
+import com.tpo.shopandpack.emun.UserRol;
+
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Setter;
@@ -16,7 +18,6 @@ public class User {
     private Long id;
     
     @Column(unique = true, nullable = false, updatable = false)
-    @Setter(lombok.AccessLevel.NONE) // Username es inmutable
     private String username;
     
     @Column(nullable = false)
@@ -27,7 +28,7 @@ public class User {
     private String apellido;
     
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private UserRol role;
     
     private String hashPassword;
     private String avatarUrl;
@@ -36,17 +37,13 @@ public class User {
     @Setter(lombok.AccessLevel.NONE) // CreatedAt es inmutable
     private LocalDateTime createdAt;
     
-    public enum Role {
-        ADMIN, USER
-    }
-    
     // Constructor por defecto requerido por JPA
     public User() {
         this.createdAt = LocalDateTime.now();
     }
     
     // Constructor
-    public User(String username, String email, String nombre, String apellido, Role role) {
+    public User(String username, String email, String nombre, String apellido, UserRol role) {
         this();
         this.username = username;
         this.email = email;

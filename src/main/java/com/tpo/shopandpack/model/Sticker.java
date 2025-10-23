@@ -1,5 +1,7 @@
 package com.tpo.shopandpack.model;
 
+import com.tpo.shopandpack.emun.Rareza;
+
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -29,22 +31,6 @@ public class Sticker {
     private Integer stockTotal;
     private Integer stockDisponible;
     private String imagenUrl;
-    
-    public enum Rareza {
-        COMUN(70),    // 70% probabilidad
-        RARA(25),     // 25% probabilidad  
-        EPICA(5);     // 5% probabilidad
-        
-        private final int probabilidad;
-        
-        Rareza(int probabilidad) {
-            this.probabilidad = probabilidad;
-        }
-        
-        public int getProbabilidad() {
-            return probabilidad;
-        }
-    }
     
     // Constructor por defecto
     public Sticker() {}
