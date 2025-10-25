@@ -57,7 +57,7 @@ public class TiendaService {
             createPackStrategy = FactoryPack.getEstrategia(Estrategia.UNIFORM);
         }
 
-        List<Sticker> stickers = createPackStrategy.armarPack(album);
+        List<Sticker> stickers = createPackStrategy.armarPack(stickersDisponibles);
 
         return new Pack();
     }

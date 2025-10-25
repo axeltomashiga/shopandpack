@@ -8,17 +8,16 @@ public class FactoryPack {
 
     public static IArmadoPackStrategy getEstrategia(Estrategia estrategia) {
 
-        IArmadoPackStrategy instancia = null;
 
         switch (estrategia) {
             case UNIFORM:
-                instancia = new UniformDistributionStrategy(); break;
+                return new UniformDistributionStrategy(); 
             case WEIGHTED:
-                instancia = new WeightedDistributionStrategy(); break;
+                return new WeightedDistributionStrategy(); 
             default:
                 throw new IllegalArgumentException("Estrategia no soportada: " + estrategia);
         }
 
-        return instancia;
+
     }
 }
