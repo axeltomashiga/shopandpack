@@ -31,15 +31,15 @@ public class Sticker {
     private Integer stockTotal;
     private Integer stockDisponible;
     private String imagenUrl;
+
+    public Sticker() {}
     
-    // Constructor por defecto
     public Sticker(Rareza rareza) {
         this.rareza = rareza;
         this.stockTotal = this.rareza.getStock();
         this.stockDisponible = stockTotal;
     }
-    
-    // Constructor
+
     public Sticker(Album album, String nombre, Integer numero, 
                    Rareza rareza, String imagenUrl) {
         this.album = album;
@@ -50,8 +50,7 @@ public class Sticker {
         this.stockDisponible = stockTotal;
         this.imagenUrl = imagenUrl;
     }
-    
-    // Método de negocio para reducir stock
+
     public boolean reducirStock(int cantidad) {
         if (stockDisponible >= cantidad) {
             stockDisponible -= cantidad;
@@ -59,8 +58,7 @@ public class Sticker {
         }
         return false;
     }
-    
-    // Método para verificar disponibilidad
+
     public boolean estaDisponible() {
         return stockDisponible > 0;
     }

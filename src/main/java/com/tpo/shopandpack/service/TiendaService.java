@@ -10,6 +10,9 @@ import com.tpo.shopandpack.repository.UserRepository;
 import com.tpo.shopandpack.repository.StickerRepository;
 import com.tpo.shopandpack.exepcion.BadRequestException;
 import com.tpo.shopandpack.exepcion.NotStickersAvailable;
+import com.tpo.shopandpack.emun.Estrategia;
+import com.tpo.shopandpack.Strategy.IArmadoPackStrategy;
+import com.tpo.shopandpack.FactoryPack;
 
 import java.util.List;
 
@@ -45,10 +48,14 @@ public class TiendaService {
             throw new NotStickersAvailable("No hay suficientes figuritas disponibles para este album");
         }
 
+        IArmadoPackStrategy createPackStrategy = FactoryPack.getEstrategia(Estrategia.UNIFORM);
 
-        Pack pack = new Pack();
-        pack.setId(1L);
-        return pack;
+
+
+        List<Sticker> stickers = createPackStrategy.armarPack();
+         System.out.println(stickers);
+        
+        return new Pack();
     }
 
     public Double obtenerPrecio() {
