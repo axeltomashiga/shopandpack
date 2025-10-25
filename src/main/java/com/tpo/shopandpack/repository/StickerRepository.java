@@ -18,5 +18,6 @@ public interface StickerRepository extends JpaRepository<Sticker, Long>{
     @Query("SELECT s FROM Sticker s WHERE s.album.id = :albumId AND s.stockDisponible > 0")
     List<Sticker> findAvailableByAlbumId(@Param("albumId") Long albumId);
 
+    @Query("SELECT s FROM Sticker s WHERE s.rareza = :rareza")
     List<Sticker> findByRareza(Rareza rareza);
 }

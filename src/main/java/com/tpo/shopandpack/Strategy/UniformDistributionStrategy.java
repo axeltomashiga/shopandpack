@@ -12,6 +12,9 @@ import com.tpo.shopandpack.emun.Rareza;
 import com.tpo.shopandpack.model.Sticker;
 import com.tpo.shopandpack.repository.StickerRepository;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class UniformDistributionStrategy implements IArmadoPackStrategy {
     @Autowired
     private StickerRepository stickerRepo;

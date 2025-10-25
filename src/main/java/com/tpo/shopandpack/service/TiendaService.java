@@ -48,11 +48,17 @@ public class TiendaService {
             throw new NotStickersAvailable("No hay suficientes figuritas disponibles para este album");
         }
 
-        IArmadoPackStrategy createPackStrategy = FactoryPack.getEstrategia(Estrategia.UNIFORM);
+        long albumPacksPurchasesByUser = packageRepository.countByUserIdAndAlbumId(userId, albumId);
+        IArmadoPackStrategy createPackStrategy = null;
+
+        if (albumPacksPurchasesByUser >= 40) {
+            createPackStrategy = FactoryPack.getEstrategia(Estrategia.WEIGHTED);
+        } else {
+            createPackStrategy = FactoryPack.getEstrategia(Estrategia.UNIFORM);
+        }
 
         List<Sticker> stickers = createPackStrategy.armarPack();
-         System.out.println(stickers);
-        
+
         return new Pack();
     }
 
