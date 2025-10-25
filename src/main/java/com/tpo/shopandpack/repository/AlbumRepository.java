@@ -6,4 +6,5 @@ import com.tpo.shopandpack.model.Album;
 
 public interface AlbumRepository extends JpaRepository<Album, Long>{
     
+    java.util.Optional<Album> findByTitulo(String titulo);
 }

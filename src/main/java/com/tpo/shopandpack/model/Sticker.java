@@ -33,16 +33,20 @@ public class Sticker {
     private String imagenUrl;
     
     // Constructor por defecto
-    public Sticker() {}
+    public Sticker(Rareza rareza) {
+        this.rareza = rareza;
+        this.stockTotal = this.rareza.getStock();
+        this.stockDisponible = stockTotal;
+    }
     
     // Constructor
     public Sticker(Album album, String nombre, Integer numero, 
-                   Rareza rareza, Integer stockTotal, String imagenUrl) {
+                   Rareza rareza, String imagenUrl) {
         this.album = album;
         this.nombre = nombre;
         this.numero = numero;
         this.rareza = rareza;
-        this.stockTotal = stockTotal;
+        this.stockTotal = this.rareza.getStock();
         this.stockDisponible = stockTotal;
         this.imagenUrl = imagenUrl;
     }

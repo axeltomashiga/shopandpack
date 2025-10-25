@@ -1,4 +1,4 @@
-package com.tpo.shopandpack.model.Strategy;
+package com.tpo.shopandpack.Strategy;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,8 +12,8 @@ import com.tpo.shopandpack.emun.Rareza;
 import com.tpo.shopandpack.model.Sticker;
 import com.tpo.shopandpack.repository.StickerRepository;
 
-public class ArmadoNormal implements IArmadoStrategy {
-    @Autowired
+public class WeightedDistributionStrategy implements IArmadoPackStrategy {
+        @Autowired
     private StickerRepository stickerRepo;
 
     @Override
@@ -26,11 +26,9 @@ public class ArmadoNormal implements IArmadoStrategy {
             Double randomDouble = random.nextDouble();
             if(randomDouble < 0.3) {
                 result.addAll(pickRandom(Rareza.EPICA, 1));
-            } else if(randomDouble < 0.6) {
-                result.addAll(pickRandom(Rareza.RARA, 1));
             } else {
-                result.addAll(pickRandom(Rareza.COMUN, 1));
-            }
+                result.addAll(pickRandom(Rareza.RARA, 1));
+            } 
         }
         return result;
     }

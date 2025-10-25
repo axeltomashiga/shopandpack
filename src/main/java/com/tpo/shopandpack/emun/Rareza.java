@@ -11,7 +11,7 @@ public enum Rareza {
         this.stock_inicial = stock_inicial;
     }
     
-    public int getProbabilidad() {
+    public int getStock() {
         return stock_inicial;
     }
 }

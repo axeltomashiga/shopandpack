@@ -7,6 +7,7 @@ import com.tpo.shopandpack.model.User;
 import com.tpo.shopandpack.model.Album;
 import com.tpo.shopandpack.model.Sticker;
 import com.tpo.shopandpack.emun.UserRol;
+import com.tpo.shopandpack.emun.Rareza;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -24,6 +25,9 @@ public class DataInitializer implements CommandLineRunner {
     @Autowired
     private AlbumRepository albumRepository;
 
+    @Autowired
+    private StickerRepository stickerRepository;
+
     @Override
     public void run(String... args) throws Exception {
         if (userRepository.count() > 0) {
@@ -33,6 +37,8 @@ public class DataInitializer implements CommandLineRunner {
         crearUsuarios();
 
         crearAlbums();
+
+        crearFiguritas();
     }
 
     private void crearUsuarios() {
@@ -66,6 +72,36 @@ public class DataInitializer implements CommandLineRunner {
         albumRepository.saveAll(Arrays.asList(album1));
     }
 
-    private void crearFiguritas() {}
+    private void crearFiguritas() {
+        Album album1 = albumRepository.findByTitulo("Album de Futbol 2024").get();
+
+        for (int i = 1; i < 50; i++) {
+            Sticker sticker = new Sticker(Rareza.COMUN);
+            sticker.setNumero(i);
+            sticker.setNombre("Jugador " + i);
+            sticker.setImagenUrl("http://example.com/sticker" + i + ".png");
+            sticker.setAlbum(album1);
+            stickerRepository.save(sticker);
+        }
+
+        for (int i = 50; i < 80; i++) {
+            Sticker sticker = new Sticker(Rareza.RARA);
+            sticker.setNumero(i);
+            sticker.setNombre("Jugador " + i);
+            sticker.setImagenUrl("http://example.com/sticker" + i + ".png");
+            sticker.setAlbum(album1);
+            stickerRepository.save(sticker);
+        }
+
+        for (int i = 80; i <= 100; i++) {
+            Sticker sticker = new Sticker(Rareza.EPICA);
+            sticker.setNumero(i);
+            sticker.setNombre("Jugador " + i);
+            sticker.setImagenUrl("http://example.com/sticker" + i + ".png");
+            sticker.setAlbum(album1);
+            stickerRepository.save(sticker);
+        }
+
+    }
 
 }
