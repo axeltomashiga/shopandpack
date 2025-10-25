@@ -16,7 +16,6 @@ public class WeightedDistributionStrategy implements IArmadoPackStrategy {
         @Autowired
     private StickerRepository stickerRepo;
 
-    @Override
     public List<Sticker> armarPack() {
         // Ejemplo: 3 comunes, 1 raro, 1 uncommon (ajusta según reglas)
         List<Sticker> result = new ArrayList<>();

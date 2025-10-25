@@ -50,8 +50,6 @@ public class TiendaService {
 
         IArmadoPackStrategy createPackStrategy = FactoryPack.getEstrategia(Estrategia.UNIFORM);
 
-
-
         List<Sticker> stickers = createPackStrategy.armarPack();
          System.out.println(stickers);
         
