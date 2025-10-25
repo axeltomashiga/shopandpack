@@ -10,7 +10,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "packs")
-public class Pack {
+public class Pack implements IPack {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +27,9 @@ public class Pack {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
     
+    @Column(nullable = false)
+    private Double precio;
+    
     @ManyToMany
     @JoinTable(
         name = "pack_stickers",
@@ -38,6 +41,7 @@ public class Pack {
     // Constructor por defecto
     public Pack() {
         this.createdAt = LocalDateTime.now();
+        this.precio = 100.00; // Precio base por defecto
     }
     
     // Constructor
@@ -45,6 +49,14 @@ public class Pack {
         this();
         this.user = user;
         this.album = album;
+    }
+    
+    // Constructor con precio
+    public Pack(User user, Album album, Double precio) {
+        this();
+        this.user = user;
+        this.album = album;
+        this.precio = precio;
     }
     
     // Método de negocio para agregar figurita al paquete
@@ -64,6 +76,36 @@ public class Pack {
     // Método personalizado para getStickers que mantiene la immutabilidad
     public List<Sticker> getStickers() { 
         return new ArrayList<>(stickers); 
+    }
+    
+    // Método de negocio para obtener el precio (componente base del patrón Decorator)
+    public Double getPrecio() {
+        return this.precio;
+    }
+    
+    // Método para establecer el precio
+    public void setPrecio(Double precio) {
+        if (precio < 0) {
+            throw new IllegalArgumentException("El precio no puede ser negativo");
+        }
+        this.precio = precio;
+    }
+    
+    /**
+     * Implementación del método crear() de la interfaz IPack
+     * Inicializa el pack con valores por defecto si es necesario
+     */
+    @Override
+    public void crear() {
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now();
+        }
+        if (this.precio == null) {
+            this.precio = 100.00;
+        }
+        if (this.stickers == null) {
+            this.stickers = new ArrayList<>();
+        }
     }
     
     @Override

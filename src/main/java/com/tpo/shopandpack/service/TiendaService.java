@@ -1,5 +1,6 @@
 package com.tpo.shopandpack.service;
 
+import com.tpo.shopandpack.decorator.PackPromo;
 import com.tpo.shopandpack.model.Pack;
 import com.tpo.shopandpack.model.Sticker;
 import com.tpo.shopandpack.model.Album;
@@ -58,11 +59,57 @@ public class TiendaService {
         }
 
         List<Sticker> stickers = createPackStrategy.armarPack(stickersDisponibles);
-
-        return new Pack();
+        
+        // Crear el pack con los stickers seleccionados
+        Pack pack = new Pack(user, album);
+        pack.crear(); // Inicializar el pack
+        
+        // Agregar los stickers al pack
+        for (Sticker sticker : stickers) {
+            pack.agregarSticker(sticker);
+            sticker.reducirStock(1); // Reducir el stock del sticker
+        }
+        
+        // Guardar los stickers actualizados
+        stickerRepository.saveAll(stickers);
+        
+        // Guardar y retornar el pack
+        return packageRepository.save(pack);
+    }
+    
+    /**
+     * Comprar un paquete con promoción/descuento
+     * Utiliza el patrón Decorator para aplicar descuentos
+     * 
+     * @param albumId ID del álbum
+     * @param userId ID del usuario
+     * @param descuento Porcentaje de descuento (ej: 20 para 20%)
+     * @return PackPromo con el descuento aplicado
+     */
+    public PackPromo comprarPaqueteConPromocion(Long albumId, Long userId, int descuento) {
+        // Primero compramos el pack normal
+        Pack pack = comprarPaquete(albumId, userId);
+        
+        // Luego lo decoramos con el descuento
+        return new PackPromo(pack, descuento);
     }
 
     public Double obtenerPrecio() {
         return 9.99;
+    }
+    
+    /**
+     * Obtener el precio de un pack con descuento aplicado
+     * 
+     * @param packId ID del pack
+     * @param descuento Porcentaje de descuento
+     * @return Precio con descuento
+     */
+    public Double obtenerPrecioConDescuento(Long packId, int descuento) {
+        Pack pack = packageRepository.findById(packId)
+                .orElseThrow(() -> new BadRequestException("Pack no encontrado"));
+        
+        PackPromo packPromo = new PackPromo(pack, descuento);
+        return packPromo.getPrecio();
     }
 }
