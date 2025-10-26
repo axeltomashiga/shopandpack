@@ -13,8 +13,10 @@ import com.tpo.shopandpack.repository.StickerRepository;
 import com.tpo.shopandpack.exepcion.BadRequestException;
 import com.tpo.shopandpack.exepcion.NotStickersAvailable;
 import com.tpo.shopandpack.emun.Estrategia;
-import com.tpo.shopandpack.Strategy.IArmadoPackStrategy;
+import com.tpo.shopandpack.Strategy.IStickerSelectionStrategy;
 import com.tpo.shopandpack.FactoryPack;
+import com.tpo.shopandpack.dto.PackDTO;
+
 
 import java.util.List;
 
@@ -41,7 +43,7 @@ public class TiendaService {
     @Autowired
     private UserStickerRepository userStickerRepository;
 
-    public Pack comprarPaquete(Long albumId, Long userId) {
+    public PackDTO comprarPaquete(Long albumId, Long userId) {
 
        User user = userRepository.findById(userId).orElseThrow(() -> new BadRequestException("Usuario no encontrado"));
 
@@ -55,14 +57,14 @@ public class TiendaService {
 
         long albumPacksPurchasesByUser = packageRepository.countByUserIdAndAlbumId(userId, albumId);
 
-        IArmadoPackStrategy createPackStrategy = null;
+        IStickerSelectionStrategy stickersSelectionStrategy = null;
         if (albumPacksPurchasesByUser >= 40) {
-            createPackStrategy = FactoryPack.getEstrategia(Estrategia.WEIGHTED);
+            stickersSelectionStrategy = FactoryPack.getEstrategia(Estrategia.WEIGHTED);
         } else {
-            createPackStrategy = FactoryPack.getEstrategia(Estrategia.UNIFORM);
+            stickersSelectionStrategy = FactoryPack.getEstrategia(Estrategia.UNIFORM);
         }
 
-        List<Sticker> stickers = createPackStrategy.armarPack(stickersDisponibles);
+        List<Sticker> stickers = stickersSelectionStrategy.selectStickers(stickersDisponibles);
 
         for (Sticker sticker : stickers) {
             int updatedRows = stickerRepository.reduceStock(sticker.getId());
@@ -74,9 +76,10 @@ public class TiendaService {
         }
 
         Pack pack = new Pack(user, album);
+        pack.setStickers(stickers);
         packageRepository.save(pack);
 
-        return new Pack();
+        return new PackDTO(pack);
     }
 
     public Double obtenerPrecio() {
