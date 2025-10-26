@@ -18,7 +18,7 @@ public class UniformDistributionStrategy implements IArmadoPackStrategy {
         List<Sticker> result = new ArrayList<>();
         result.addAll(pickRandom(Rareza.COMUN, 3, stickersDisponibles));
         Random random = new Random();
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i <= 1; i++) {
             Double randomDouble = random.nextDouble();
             if(randomDouble < 0.3) {
                 result.addAll(pickRandom(Rareza.EPICA, 1, stickersDisponibles));

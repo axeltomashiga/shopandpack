@@ -7,17 +7,17 @@ import com.tpo.shopandpack.emun.Estrategia;
 public class FactoryPack {
 
     public static IArmadoPackStrategy getEstrategia(Estrategia estrategia) {
-
+        IArmadoPackStrategy instancia = null;
 
         switch (estrategia) {
             case UNIFORM:
-                return new UniformDistributionStrategy(); 
+                instancia = new UniformDistributionStrategy(); break;
             case WEIGHTED:
-                return new WeightedDistributionStrategy(); 
+                instancia = new WeightedDistributionStrategy();  break;
             default:
                 throw new IllegalArgumentException("Estrategia no soportada: " + estrategia);
         }
 
-
+        return instancia;
     }
 }
