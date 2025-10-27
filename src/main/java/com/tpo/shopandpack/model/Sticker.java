@@ -33,7 +33,7 @@ public class Sticker {
     private String imagenUrl;
 
     public Sticker() {}
-    
+
     public Sticker(Rareza rareza) {
         this.rareza = rareza;
         this.stockTotal = this.rareza.getStock();

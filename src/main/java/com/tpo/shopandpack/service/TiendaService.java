@@ -5,15 +5,19 @@ import com.tpo.shopandpack.model.Pack;
 import com.tpo.shopandpack.model.Sticker;
 import com.tpo.shopandpack.model.Album;
 import com.tpo.shopandpack.model.User;
+import com.tpo.shopandpack.model.UserSticker;
 import com.tpo.shopandpack.repository.AlbumRepository;
 import com.tpo.shopandpack.repository.PackageRepository;
 import com.tpo.shopandpack.repository.UserRepository;
+import com.tpo.shopandpack.repository.UserStickerRepository;
 import com.tpo.shopandpack.repository.StickerRepository;
 import com.tpo.shopandpack.exepcion.BadRequestException;
 import com.tpo.shopandpack.exepcion.NotStickersAvailable;
 import com.tpo.shopandpack.emun.Estrategia;
-import com.tpo.shopandpack.Strategy.IArmadoPackStrategy;
+import com.tpo.shopandpack.Strategy.IStickerSelectionStrategy;
 import com.tpo.shopandpack.FactoryPack;
+import com.tpo.shopandpack.dto.PackDTO;
+
 
 import java.util.List;
 
@@ -37,25 +41,28 @@ public class TiendaService {
     @Autowired
     private StickerRepository stickerRepository;
 
-    public Pack comprarPaquete(Long albumId, Long userId) {
+    @Autowired
+    private UserStickerRepository userStickerRepository;
+
+    public PackDTO comprarPaquete(Long albumId, Long userId) {
 
        User user = userRepository.findById(userId).orElseThrow(() -> new BadRequestException("Usuario no encontrado"));
 
        Album album = albumRepository.findById(albumId).orElseThrow(() -> new BadRequestException("Album no encontrado"));
         
 
-       List<Sticker> stickersDisponibles = stickerRepository.findAvailableByAlbumId(albumId);
+       List<Sticker> stickersDisponibles = stickerRepository.findAvailableByAlbumId(albumId); 
         if(stickersDisponibles.size() < 5) {
             throw new NotStickersAvailable("No hay suficientes figuritas disponibles para este album");
         }
 
         long albumPacksPurchasesByUser = packageRepository.countByUserIdAndAlbumId(userId, albumId);
-        IArmadoPackStrategy createPackStrategy = null;
 
+        IStickerSelectionStrategy stickersSelectionStrategy = null;
         if (albumPacksPurchasesByUser >= 40) {
-            createPackStrategy = FactoryPack.getEstrategia(Estrategia.WEIGHTED);
+            stickersSelectionStrategy = FactoryPack.getEstrategia(Estrategia.WEIGHTED);
         } else {
-            createPackStrategy = FactoryPack.getEstrategia(Estrategia.UNIFORM);
+            stickersSelectionStrategy = FactoryPack.getEstrategia(Estrategia.UNIFORM);
         }
 
         List<Sticker> stickers = createPackStrategy.armarPack(stickersDisponibles);

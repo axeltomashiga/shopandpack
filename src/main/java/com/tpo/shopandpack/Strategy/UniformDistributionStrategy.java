@@ -11,14 +11,14 @@ import com.tpo.shopandpack.model.Sticker;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UniformDistributionStrategy implements IArmadoPackStrategy {
+public class UniformDistributionStrategy implements IStickerSelectionStrategy {
 
-    public List<Sticker> armarPack(List<Sticker> stickersDisponibles) {
+    public List<Sticker> selectStickers(List<Sticker> stickersDisponibles) {
         // Ejemplo: 3 comunes, 1 raro, 1 uncommon (ajusta según reglas)
         List<Sticker> result = new ArrayList<>();
         result.addAll(pickRandom(Rareza.COMUN, 3, stickersDisponibles));
         Random random = new Random();
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i <= 1; i++) {
             Double randomDouble = random.nextDouble();
             if(randomDouble < 0.3) {
                 result.addAll(pickRandom(Rareza.EPICA, 1, stickersDisponibles));
