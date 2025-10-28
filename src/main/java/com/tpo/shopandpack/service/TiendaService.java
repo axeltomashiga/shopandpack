@@ -18,7 +18,6 @@ import com.tpo.shopandpack.Strategy.IStickerSelectionStrategy;
 import com.tpo.shopandpack.FactoryPack;
 import com.tpo.shopandpack.dto.PackDTO;
 
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +43,9 @@ public class TiendaService {
     @Autowired
     private UserStickerRepository userStickerRepository;
 
+    @Autowired
+    private PagoService pagoService;
+
     public PackDTO comprarPaquete(Long albumId, Long userId) {
 
        User user = userRepository.findById(userId).orElseThrow(() -> new BadRequestException("Usuario no encontrado"));
@@ -65,46 +67,29 @@ public class TiendaService {
             stickersSelectionStrategy = FactoryPack.getEstrategia(Estrategia.UNIFORM);
         }
 
-        List<Sticker> stickers = createPackStrategy.armarPack(stickersDisponibles);
+        List<Sticker> stickers = stickersSelectionStrategy.selectStickers(stickersDisponibles);
         
-        // Crear el pack con los stickers seleccionados
         Pack pack = new Pack(user, album);
-        pack.crear(); // Inicializar el pack
+        pack.crear();
         
-        // Agregar los stickers al pack
-        for (Sticker sticker : stickers) {
-            pack.agregarSticker(sticker);
-            sticker.reducirStock(1); // Reducir el stock del sticker
-        }
-        
-        // Guardar los stickers actualizados
-        stickerRepository.saveAll(stickers);
-        
-        // Guardar y retornar el pack
-        return packageRepository.save(pack);
-    }
-    
-    /**
-     * Comprar un paquete con promoción/descuento
-     * Utiliza el patrón Decorator para aplicar descuentos
-     * 
-     * @param albumId ID del álbum
-     * @param userId ID del usuario
-     * @param descuento Porcentaje de descuento (ej: 20 para 20%)
-     * @return PackPromo con el descuento aplicado
-     */
-    public PackPromo comprarPaqueteConPromocion(Long albumId, Long userId, int descuento) {
-        // Primero compramos el pack normal
-        Pack pack = comprarPaquete(albumId, userId);
-        
-        // Luego lo decoramos con el descuento
-        return new PackPromo(pack, descuento);
-    }
+        pack.setStickers(stickers);
 
-    public Double obtenerPrecio() {
-        return 9.99;
+        pagoService.procesar(pack);
+        
+        stickerRepository.saveAll(stickers);
+
+        userStickerRepository.saveAll(
+            stickers.stream()
+                .map(sticker -> new UserSticker(user, sticker))
+                .toList()
+        );
+
+        packageRepository.save(pack);
+
+        PackDTO packDTO = new PackDTO(pack);
+        return packDTO;
     }
-    
+ 
     /**
      * Obtener el precio de un pack con descuento aplicado
      * 
@@ -112,7 +97,7 @@ public class TiendaService {
      * @param descuento Porcentaje de descuento
      * @return Precio con descuento
      */
-    public Double obtenerPrecioConDescuento(Long packId, int descuento) {
+    public Double obtenerPrecio(Long packId, int descuento) {
         Pack pack = packageRepository.findById(packId)
                 .orElseThrow(() -> new BadRequestException("Pack no encontrado"));
         
