@@ -1,5 +1,6 @@
 package com.tpo.shopandpack.service;
 
+import com.tpo.shopandpack.decorator.PackPromo;
 import com.tpo.shopandpack.model.Pack;
 import com.tpo.shopandpack.model.Sticker;
 import com.tpo.shopandpack.model.Album;
@@ -16,7 +17,6 @@ import com.tpo.shopandpack.emun.Estrategia;
 import com.tpo.shopandpack.Strategy.IStickerSelectionStrategy;
 import com.tpo.shopandpack.FactoryPack;
 import com.tpo.shopandpack.dto.PackDTO;
-
 
 import java.util.List;
 
@@ -43,6 +43,9 @@ public class TiendaService {
     @Autowired
     private UserStickerRepository userStickerRepository;
 
+    @Autowired
+    private PagoService pagoService;
+
     public PackDTO comprarPaquete(Long albumId, Long userId) {
 
        User user = userRepository.findById(userId).orElseThrow(() -> new BadRequestException("Usuario no encontrado"));
@@ -65,24 +68,40 @@ public class TiendaService {
         }
 
         List<Sticker> stickers = stickersSelectionStrategy.selectStickers(stickersDisponibles);
-
-        for (Sticker sticker : stickers) {
-            int updatedRows = stickerRepository.reduceStock(sticker.getId());
-            if (updatedRows == 0) {
-                throw new NotStickersAvailable("Figurita no disponible: " + sticker.getNombre());
-            }
-            UserSticker userSticker = new UserSticker(user, sticker);
-            userStickerRepository.save(userSticker);
-        }
-
+        
         Pack pack = new Pack(user, album);
+        pack.crear();
+        
         pack.setStickers(stickers);
+
+        pagoService.procesar(pack);
+        
+        stickerRepository.saveAll(stickers);
+
+        userStickerRepository.saveAll(
+            stickers.stream()
+                .map(sticker -> new UserSticker(user, sticker))
+                .toList()
+        );
+
         packageRepository.save(pack);
 
-        return new PackDTO(pack);
+        PackDTO packDTO = new PackDTO(pack);
+        return packDTO;
     }
-
-    public Double obtenerPrecio() {
-        return 9.99;
+ 
+    /**
+     * Obtener el precio de un pack con descuento aplicado
+     * 
+     * @param packId ID del pack
+     * @param descuento Porcentaje de descuento
+     * @return Precio con descuento
+     */
+    public Double obtenerPrecio(Long packId, int descuento) {
+        Pack pack = packageRepository.findById(packId)
+                .orElseThrow(() -> new BadRequestException("Pack no encontrado"));
+        
+        PackPromo packPromo = new PackPromo(pack, descuento);
+        return packPromo.getPrecio();
     }
 }
