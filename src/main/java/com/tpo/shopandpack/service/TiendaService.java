@@ -74,7 +74,9 @@ public class TiendaService {
         
         pack.setStickers(stickers);
 
-        pagoService.procesar(pack);
+        //pagoService.procesarPago(pack);
+
+        pagoService.procesarPago(pack);
         
         stickerRepository.saveAll(stickers);
 

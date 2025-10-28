@@ -90,7 +90,14 @@ public class Pack implements IPack {
         }
         this.precio = precio;
     }
-    
+
+    //Metodo para reducir stock de stickers
+    public void reducirStockStickers() {
+        for (Sticker sticker : stickers) {
+            sticker.reducirStock(1);
+        }
+    }
+
     /**
      * Implementación del método crear() de la interfaz IPack
      * Inicializa el pack con valores por defecto si es necesario
