@@ -29,7 +29,7 @@ public class TiendaController {
     */
     @GetMapping("/albums/{albumId}/packs")
     public ResponseEntity<?> comprarPaquete(@PathVariable(required = true) Long albumId, @RequestBody ComprarPackRequestDTO request){
-        PackDTO pack = tiendaService.comprarPaquete(albumId, request.getUserId());
+        PackDTO pack = tiendaService.comprarPaquete(albumId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(pack);
     }
 

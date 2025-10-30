@@ -16,6 +16,7 @@ import com.tpo.shopandpack.exepcion.NotStickersAvailable;
 import com.tpo.shopandpack.emun.Estrategia;
 import com.tpo.shopandpack.Strategy.IStickerSelectionStrategy;
 import com.tpo.shopandpack.FactoryPack;
+import com.tpo.shopandpack.dto.ComprarPackRequestDTO;
 import com.tpo.shopandpack.dto.PackDTO;
 
 import java.util.List;
@@ -45,16 +46,17 @@ public class TiendaService {
 
     @Autowired
     private PagoService pagoService;
+    
+    
+    public PackDTO comprarPaquete(Long albumId, ComprarPackRequestDTO request) {
+        Long userId = request.getUserId();
 
-    public PackDTO comprarPaquete(Long albumId, Long userId) {
+        User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new BadRequestException("Usuario no encontrado"));
 
-       User user = userRepository.findById(userId).orElseThrow(() -> new BadRequestException("Usuario no encontrado"));
+        Album album = albumRepository.findById(albumId).orElseThrow(() -> new BadRequestException("Album no encontrado"));
 
-       Album album = albumRepository.findById(albumId).orElseThrow(() -> new BadRequestException("Album no encontrado"));
-        
-
-       List<Sticker> stickersDisponibles = stickerRepository.findAvailableByAlbumId(albumId); 
-        if(stickersDisponibles.size() < 5) {
+        List<Sticker> stickersDisponibles = stickerRepository.findAvailableByAlbumId(albumId);
+        if (stickersDisponibles.size() < 5) {
             throw new NotStickersAvailable("No hay suficientes figuritas disponibles para este album");
         }
 
@@ -71,13 +73,15 @@ public class TiendaService {
         
         Pack pack = new Pack(user, album);
         pack.crear();
-        
         pack.setStickers(stickers);
 
-        //pagoService.procesarPago(pack);
-
-        pagoService.procesarPago(pack);
+        // 1. PRIMERO: Guardar el pack para que tenga ID
+        packageRepository.save(pack);
         
+        // 2. SEGUNDO: Procesar el pago (ahora el pack ya tiene ID)
+        pagoService.procesarPago(pack, request);
+        
+        // 3. TERCERO: Guardar stickers y relaciones
         stickerRepository.saveAll(stickers);
 
         userStickerRepository.saveAll(
@@ -85,8 +89,6 @@ public class TiendaService {
                 .map(sticker -> new UserSticker(user, sticker))
                 .toList()
         );
-
-        packageRepository.save(pack);
 
         PackDTO packDTO = new PackDTO(pack);
         return packDTO;
