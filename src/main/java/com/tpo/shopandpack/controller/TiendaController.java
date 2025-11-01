@@ -19,7 +19,6 @@ public class TiendaController {
     @Autowired
     private TiendaService tiendaService;
 
-
     /**
     * Endpoint para comprar un paquete de stickers para un álbum específico
     * @param albumId ID del álbum

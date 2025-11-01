@@ -68,8 +68,7 @@ public class TiendaService {
         pack.setStickers(stickers);
        
         packageRepository.save(pack);
-        
-        // 2. SEGUNDO: Procesar el pago (ahora el pack ya tiene ID)
+
         pagoService.procesar(pack);
 
         PackDTO packDTO = new PackDTO(pack);

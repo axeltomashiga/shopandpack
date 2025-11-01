@@ -29,15 +29,15 @@ public class Pack {
     
     @Column(nullable = false)
     private Double precio;
-    
-    @ManyToMany
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
-        name = "pack_stickers",
+        name = "packs_stickers",
         joinColumns = @JoinColumn(name = "pack_id"),
         inverseJoinColumns = @JoinColumn(name = "sticker_id")
     )
     private List<Sticker> stickers = new ArrayList<>();
-    
+
     // Constructor por defecto
     public Pack() {
         this.createdAt = LocalDateTime.now();
@@ -59,26 +59,12 @@ public class Pack {
         this.album = album;
         this.precio = precio;
     }
-    
-    // Método de negocio para agregar figurita al paquete
-    public void agregarSticker(Sticker sticker) {
-        if (stickers.size() < 5) { // Máximo 5 figuritas por paquete
-            stickers.add(sticker);
-        } else {
-            throw new IllegalStateException("El paquete ya tiene 5 figuritas");
-        }
-    }
-    
-    // Método para verificar si el paquete está completo
-    public boolean estaCompleto() {
-        return stickers.size() == 5;
-    }
-    
+
     // Método personalizado para getStickers que mantiene la immutabilidad
     public List<Sticker> getStickers() { 
         return new ArrayList<>(stickers); 
     }
-    
+
     // Método de negocio para obtener el precio (componente base del patrón Decorator)
     public Double getPrecio() {
         return this.precio;
