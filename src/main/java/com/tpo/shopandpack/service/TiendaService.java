@@ -5,11 +5,9 @@ import com.tpo.shopandpack.model.Pack;
 import com.tpo.shopandpack.model.Sticker;
 import com.tpo.shopandpack.model.Album;
 import com.tpo.shopandpack.model.User;
-import com.tpo.shopandpack.model.UserSticker;
 import com.tpo.shopandpack.repository.AlbumRepository;
 import com.tpo.shopandpack.repository.PackageRepository;
 import com.tpo.shopandpack.repository.UserRepository;
-import com.tpo.shopandpack.repository.UserStickerRepository;
 import com.tpo.shopandpack.repository.StickerRepository;
 import com.tpo.shopandpack.exepcion.BadRequestException;
 import com.tpo.shopandpack.exepcion.NotStickersAvailable;
@@ -17,7 +15,6 @@ import com.tpo.shopandpack.emun.Estrategia;
 import com.tpo.shopandpack.emun.TipoPago;
 import com.tpo.shopandpack.Strategy.IStickerSelectionStrategy;
 import com.tpo.shopandpack.FactoryPack;
-import com.tpo.shopandpack.dto.ComprarPackRequestDTO;
 import com.tpo.shopandpack.dto.PackDTO;
 
 import java.util.List;
@@ -41,9 +38,6 @@ public class TiendaService {
 
     @Autowired
     private StickerRepository stickerRepository;
-
-    @Autowired
-    private UserStickerRepository userStickerRepository;
 
     @Autowired
     private PagoService pagoService;
@@ -72,23 +66,12 @@ public class TiendaService {
         List<Sticker> stickers = stickersSelectionStrategy.selectStickers(stickersDisponibles);
         
         Pack pack = new Pack(user, album);
-        pack.crear();
         pack.setStickers(stickers);
-
-        // 1. PRIMERO: Guardar el pack para que tenga ID
+       
         packageRepository.save(pack);
         
         // 2. SEGUNDO: Procesar el pago (ahora el pack ya tiene ID)
-        //pagoService.procesarPago(pack, request);
-        
-        // 3. TERCERO: Guardar stickers y relaciones
-        stickerRepository.saveAll(stickers);
-
-        userStickerRepository.saveAll(
-            stickers.stream()
-                .map(sticker -> new UserSticker(user, sticker))
-                .toList()
-        );
+        pagoService.procesar(pack, tipoPago);
 
         PackDTO packDTO = new PackDTO(pack);
         return packDTO;

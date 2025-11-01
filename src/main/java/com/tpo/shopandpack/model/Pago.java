@@ -1,6 +1,5 @@
 package com.tpo.shopandpack.model;
 
-import com.tpo.shopandpack.Adapter.ITipoPago;
 import com.tpo.shopandpack.emun.TipoPago;
 
 import jakarta.persistence.Entity;
@@ -37,20 +36,14 @@ public class Pago {
     // Constructor vacío requerido por JPA/Hibernate
     public Pago() {}
 
-    public Pago(Pack pack, User user, String tipoPago) {
+    public Pago(Pack pack, User user, TipoPago tipoPago) {
         this.pack = pack;
         this.user = user;
         try {
-            this.tipoPago = TipoPago.valueOf(tipoPago.toUpperCase().trim());
+            this.tipoPago = TipoPago.valueOf(tipoPago.name());
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Tipo de pago no soportado");
         }
           
     }
-
-    public void procesarPago() {
-        ITipoPago metodoPago = tipoPago.getTipoPago();
-        metodoPago.procesarPago(this.pack);
-    }
-
 }

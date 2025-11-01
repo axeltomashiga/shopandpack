@@ -27,5 +27,5 @@ public interface StickerRepository extends JpaRepository<Sticker, Long>{
     @Modifying(clearAutomatically = true)
     @Transactional
     @Query("UPDATE Sticker s SET s.stockDisponible = s.stockDisponible - 1 WHERE s.id = :stickerId AND s.stockDisponible > 0")
-    int reduceStock(@Param("stickerId") Long stickerId);
+    int reducirStock(@Param("stickerId") Long stickerId);
 }
