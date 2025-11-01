@@ -10,7 +10,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "packs")
-public class Pack implements IPack {
+public class Pack {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,19 +29,19 @@ public class Pack implements IPack {
     
     @Column(nullable = false)
     private Double precio;
-    
-    @ManyToMany
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
-        name = "pack_stickers",
+        name = "packs_stickers",
         joinColumns = @JoinColumn(name = "pack_id"),
         inverseJoinColumns = @JoinColumn(name = "sticker_id")
     )
     private List<Sticker> stickers = new ArrayList<>();
-    
+
     // Constructor por defecto
     public Pack() {
         this.createdAt = LocalDateTime.now();
-        this.precio = 100.00; // Precio base por defecto
+        this.precio = 3000.00;
     }
     
     // Constructor
@@ -49,6 +49,7 @@ public class Pack implements IPack {
         this();
         this.user = user;
         this.album = album;
+        this.precio = 3000.00;
     }
     
     // Constructor con precio
@@ -58,26 +59,12 @@ public class Pack implements IPack {
         this.album = album;
         this.precio = precio;
     }
-    
-    // Método de negocio para agregar figurita al paquete
-    public void agregarSticker(Sticker sticker) {
-        if (stickers.size() < 5) { // Máximo 5 figuritas por paquete
-            stickers.add(sticker);
-        } else {
-            throw new IllegalStateException("El paquete ya tiene 5 figuritas");
-        }
-    }
-    
-    // Método para verificar si el paquete está completo
-    public boolean estaCompleto() {
-        return stickers.size() == 5;
-    }
-    
+
     // Método personalizado para getStickers que mantiene la immutabilidad
     public List<Sticker> getStickers() { 
         return new ArrayList<>(stickers); 
     }
-    
+
     // Método de negocio para obtener el precio (componente base del patrón Decorator)
     public Double getPrecio() {
         return this.precio;
@@ -91,30 +78,6 @@ public class Pack implements IPack {
         this.precio = precio;
     }
 
-    //Metodo para reducir stock de stickers
-    public void reducirStockStickers() {
-        for (Sticker sticker : stickers) {
-            sticker.reducirStock(1);
-        }
-    }
-
-    /**
-     * Implementación del método crear() de la interfaz IPack
-     * Inicializa el pack con valores por defecto si es necesario
-     */
-    @Override
-    public void crear() {
-        if (this.createdAt == null) {
-            this.createdAt = LocalDateTime.now();
-        }
-        if (this.precio == null) {
-            this.precio = 100.00;
-        }
-        if (this.stickers == null) {
-            this.stickers = new ArrayList<>();
-        }
-    }
-    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

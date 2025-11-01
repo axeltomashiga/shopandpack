@@ -1,11 +1,6 @@
 package com.tpo.shopandpack.model;
 
-import com.tpo.shopandpack.Adapter.ITipoPago;
-import com.tpo.shopandpack.emun.TipoPago;
-
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -31,26 +26,11 @@ public class Pago {
     @JoinColumn(name = "pack_id", nullable = false)
     private Pack pack;
 
-    @Enumerated(EnumType.STRING)
-    private TipoPago tipoPago;
-
     // Constructor vacío requerido por JPA/Hibernate
     public Pago() {}
 
-    public Pago(Pack pack, User user, String tipoPago) {
+    public Pago(Pack pack, User user) {
         this.pack = pack;
-        this.user = user;
-        try {
-            this.tipoPago = TipoPago.valueOf(tipoPago.toUpperCase().trim());
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Tipo de pago no soportado");
-        }
-          
+        this.user = user;     
     }
-
-    public void procesarPago() {
-        ITipoPago metodoPago = tipoPago.getTipoPago();
-        metodoPago.procesarPago(this.pack);
-    }
-
 }

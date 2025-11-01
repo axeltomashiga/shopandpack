@@ -51,18 +51,6 @@ public class Sticker {
         this.imagenUrl = imagenUrl;
     }
 
-    public boolean reducirStock(int cantidad) {
-        if (stockDisponible >= cantidad) {
-            stockDisponible -= cantidad;
-            return true;
-        }
-        return false;
-    }
-
-    public boolean estaDisponible() {
-        return stockDisponible > 0;
-    }
-    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

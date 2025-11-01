@@ -1,6 +1,5 @@
 package com.tpo.shopandpack.controller;
 
-import com.tpo.shopandpack.dto.ComprarPackRequestDTO;
 import com.tpo.shopandpack.dto.PackDTO;
 
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +19,6 @@ public class TiendaController {
     @Autowired
     private TiendaService tiendaService;
 
-
     /**
     * Endpoint para comprar un paquete de stickers para un álbum específico
     * @param albumId ID del álbum
@@ -28,8 +26,11 @@ public class TiendaController {
     * @return Detalles del pack comprado
     */
     @GetMapping("/albums/{albumId}/packs")
-    public ResponseEntity<?> comprarPaquete(@PathVariable(required = true) Long albumId, @RequestBody ComprarPackRequestDTO request){
-        PackDTO pack = tiendaService.comprarPaquete(albumId, request);
+    public ResponseEntity<?> comprarPaquete(
+        @PathVariable(required = true) Long albumId, 
+        @RequestParam(required = true) Long userId
+    ){
+        PackDTO pack = tiendaService.comprarPaquete(albumId, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(pack);
     }
 
