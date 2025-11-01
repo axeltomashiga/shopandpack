@@ -1,6 +1,5 @@
 package com.tpo.shopandpack.decorator;
 
-import com.tpo.shopandpack.model.IPack;
 import com.tpo.shopandpack.model.Pack;
 import com.tpo.shopandpack.model.Sticker;
 import lombok.Getter;
@@ -12,7 +11,7 @@ import java.util.List;
  * Permite agregar descuentos a un pack existente sin modificar la clase Pack
  */
 @Getter
-public class PackPromo implements IPack {
+public class PackPromo {
     
     private final Pack pack;
     private final Double descuento; // Descuento como decimal (ej: 0.20 = 20%)
@@ -46,7 +45,6 @@ public class PackPromo implements IPack {
      * Calcula el precio con descuento aplicado
      * @return El precio del pack con el descuento aplicado
      */
-    @Override
     public Double getPrecio() {
         Double precioOriginal = pack.getPrecio();
         Double montoDescuento = precioOriginal * descuento;
@@ -58,21 +56,11 @@ public class PackPromo implements IPack {
      * Obtiene los stickers del pack decorado
      * @return Lista de stickers del pack original
      */
-    @Override
     public List<Sticker> getStickers() {
         return pack.getStickers();
     }
     
-    /**
-     * Crea o inicializa el pack
-     * En este caso, delega la creación al pack original
-     */
-    @Override
-    public void crear() {
-        // El pack ya existe, no es necesario crear nada
-        // Este método está aquí por el contrato de la interfaz IPack
-    }
-    
+
     /**
      * Obtiene el monto del descuento aplicado
      * @return El monto en pesos del descuento
