@@ -12,7 +12,6 @@ import com.tpo.shopandpack.repository.StickerRepository;
 import com.tpo.shopandpack.exepcion.BadRequestException;
 import com.tpo.shopandpack.exepcion.NotStickersAvailable;
 import com.tpo.shopandpack.emun.Estrategia;
-import com.tpo.shopandpack.emun.TipoPago;
 import com.tpo.shopandpack.Strategy.IStickerSelectionStrategy;
 import com.tpo.shopandpack.FactoryPack;
 import com.tpo.shopandpack.dto.PackDTO;
@@ -43,7 +42,7 @@ public class TiendaService {
     private PagoService pagoService;
     
     
-    public PackDTO comprarPaquete(Long albumId, Long userId, TipoPago tipoPago) {
+    public PackDTO comprarPaquete(Long albumId, Long userId) {
 
         User user = userRepository.findById(userId).orElseThrow(() -> new BadRequestException("Usuario no encontrado"));
 
@@ -71,7 +70,7 @@ public class TiendaService {
         packageRepository.save(pack);
         
         // 2. SEGUNDO: Procesar el pago (ahora el pack ya tiene ID)
-        pagoService.procesar(pack, tipoPago);
+        pagoService.procesar(pack);
 
         PackDTO packDTO = new PackDTO(pack);
         return packDTO;

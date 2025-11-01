@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tpo.shopandpack.emun.TipoPago;
 import com.tpo.shopandpack.model.Pack;
 import com.tpo.shopandpack.model.Pago;
 import com.tpo.shopandpack.model.Sticker;
@@ -30,9 +29,9 @@ public class PagoService {
     @Autowired
     private StickerRepository stickerRepository;
     
-    public void procesar(Pack pack, TipoPago tipoPago) {
+    public void procesar(Pack pack) {
         User user = pack.getUser();
-        Pago pago = new Pago(pack, user, tipoPago);
+        Pago pago = new Pago(pack, user);
 
         List<Sticker> stickers = pack.getStickers();
 

@@ -1,7 +1,6 @@
 package com.tpo.shopandpack.controller;
 
 import com.tpo.shopandpack.dto.PackDTO;
-import com.tpo.shopandpack.emun.TipoPago;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
@@ -30,10 +29,9 @@ public class TiendaController {
     @GetMapping("/albums/{albumId}/packs")
     public ResponseEntity<?> comprarPaquete(
         @PathVariable(required = true) Long albumId, 
-        @RequestParam(required = true) Long userId,
-        @RequestParam(required = true) TipoPago tipoPago
+        @RequestParam(required = true) Long userId
     ){
-        PackDTO pack = tiendaService.comprarPaquete(albumId, userId, tipoPago);
+        PackDTO pack = tiendaService.comprarPaquete(albumId, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(pack);
     }
 
