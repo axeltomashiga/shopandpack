@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Setter;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -36,14 +34,11 @@ public class Album {
     @Column(name = "created_at")
     @Setter(lombok.AccessLevel.NONE) // CreatedAt es inmutable
     private LocalDateTime createdAt;
-    
-    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Sticker> stickers = new ArrayList<>();
-    
+
     public enum Dificultad {
         FACIL, MEDIO, DIFICIL
     }
-    
+
     // Constructor por defecto
     public Album() {
         this.createdAt = LocalDateTime.now();

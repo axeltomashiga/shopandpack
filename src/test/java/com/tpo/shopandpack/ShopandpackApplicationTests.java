@@ -14,5 +14,4 @@ class ShopandpackApplicationTests {
 	public static void main(String[] args) {
 		SpringApplication.run(ShopandpackApplication.class, args);
 	}
-
 }

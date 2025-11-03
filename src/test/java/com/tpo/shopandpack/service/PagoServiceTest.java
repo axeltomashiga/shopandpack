@@ -26,7 +26,7 @@ public class PagoServiceTest {
 
         pack.setStickers(List.of(s1, s2));
 
-        pagoService.procesarPago(pack);
+        pagoService.procesar(pack);
 
         assertEquals(inicial1 - 1, s1.getStockDisponible());
         assertEquals(inicial2 - 1, s2.getStockDisponible());
