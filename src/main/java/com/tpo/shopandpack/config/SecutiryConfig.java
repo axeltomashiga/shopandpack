@@ -20,7 +20,7 @@ public class SecutiryConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.GET, "/api/shop/albums/**").permitAll()
-
+                        .requestMatchers(HttpMethod.POST, "/api/shop/albums/**").permitAll()
 
 
                         .anyRequest().authenticated());

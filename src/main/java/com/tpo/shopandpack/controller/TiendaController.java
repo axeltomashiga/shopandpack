@@ -25,7 +25,7 @@ public class TiendaController {
     * @param request Objeto que contiene el ID del usuario
     * @return Detalles del pack comprado
     */
-    @GetMapping("/albums/{albumId}/packs")
+    @PostMapping("/albums/{albumId}/packs")
     public ResponseEntity<?> comprarPaquete(
         @PathVariable(required = true) Long albumId, 
         @RequestParam(required = true) Long userId

@@ -11,7 +11,7 @@ import java.util.List;
  * Permite agregar descuentos a un pack existente sin modificar la clase Pack
  */
 @Getter
-public class PackPromo {
+public class PackPromo extends Pack{
     
     private final Pack pack;
     private final Double descuento; // Descuento como decimal (ej: 0.20 = 20%)
