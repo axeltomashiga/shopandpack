@@ -1,7 +1,6 @@
 package com.tpo.shopandpack.decorator;
 
 import com.tpo.shopandpack.model.IPack;
-import com.tpo.shopandpack.model.Pack;
 import com.tpo.shopandpack.model.Sticker;
 import lombok.Getter;
 
@@ -14,7 +13,7 @@ import java.util.List;
 @Getter
 public class PackPromo implements IPack {
     
-    private final Pack pack;
+    private final IPack pack;
     private final Double descuento; // Descuento como decimal (ej: 0.20 = 20%)
     
     /**
@@ -22,7 +21,7 @@ public class PackPromo implements IPack {
      * @param pack El pack a decorar
      * @param descuento El porcentaje de descuento como decimal (0.0 a 1.0)
      */
-    public PackPromo(Pack pack, Double descuento) {
+    public PackPromo(IPack pack, Double descuento) {
         if (pack == null) {
             throw new IllegalArgumentException("El pack no puede ser null");
         }
@@ -38,7 +37,7 @@ public class PackPromo implements IPack {
      * @param pack El pack a decorar
      * @param descuentoPorcentaje El porcentaje de descuento (ej: 20 para 20%)
      */
-    public PackPromo(Pack pack, int descuentoPorcentaje) {
+    public PackPromo(IPack pack, int descuentoPorcentaje) {
         this(pack, descuentoPorcentaje / 100.0);
     }
     
@@ -80,15 +79,7 @@ public class PackPromo implements IPack {
     public Double getDescuentoPorcentaje() {
         return (double) Math.round(descuento * 100.0);
     }
-    
-    /**
-     * Obtiene el pack original sin decorar
-     * @return El pack base
-     */
-    public Pack getPackOriginal() {
-        return pack;
-    }
-    
+
     @Override
     public String toString() {
         return String.format("PackPromo{pack=%s, descuento=%.0f%%, precioOriginal=%.2f, precioFinal=%.2f}",
@@ -96,6 +87,11 @@ public class PackPromo implements IPack {
                 getDescuentoPorcentaje(),
                 pack.getPrecio(),
                 getPrecio());
+    }
+
+    @Override
+    public Long getId() {
+        return this.pack.getId();
     }
 }
 

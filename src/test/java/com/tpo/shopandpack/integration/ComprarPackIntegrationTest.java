@@ -70,7 +70,8 @@ public class ComprarPackIntegrationTest {
     // Note: we intentionally don't assert total stock here because sticker selection strategies
     // can vary; we focus on persistence and basic flow in this integration test.
 
-        ComprarPackRequestDTO req = new ComprarPackRequestDTO(user.getId(), "EFECTIVO");
+    ComprarPackRequestDTO req = new ComprarPackRequestDTO();
+    req.setUserId(user.getId());
 
         PackDTO packDTO = tiendaService.comprarPaquete(album.getId(), req);
 

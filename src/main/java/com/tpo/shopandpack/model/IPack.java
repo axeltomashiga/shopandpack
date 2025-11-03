@@ -19,6 +19,8 @@ public interface IPack {
      * @return Lista de stickers
      */
     List<Sticker> getStickers();
+
+    Long getId();
     
 }
 

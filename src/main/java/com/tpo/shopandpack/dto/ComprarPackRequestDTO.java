@@ -5,12 +5,12 @@ import lombok.Data;
 @Data
 public class ComprarPackRequestDTO {
     Long userId;
-    String tipoPago;
+    Long descuento;
 
     public ComprarPackRequestDTO() {}
 
-    public ComprarPackRequestDTO(Long userId, String tipoPago) {
+    public ComprarPackRequestDTO(Long userId, Long descuento) {
         this.userId = userId;
-        this.tipoPago = tipoPago;
+        this.descuento = descuento;
     }
 }
