@@ -64,16 +64,6 @@ public class PackPromo implements IPack {
     }
     
     /**
-     * Crea o inicializa el pack
-     * En este caso, delega la creación al pack original
-     */
-    @Override
-    public void crear() {
-        // El pack ya existe, no es necesario crear nada
-        // Este método está aquí por el contrato de la interfaz IPack
-    }
-    
-    /**
      * Obtiene el monto del descuento aplicado
      * @return El monto en pesos del descuento
      */

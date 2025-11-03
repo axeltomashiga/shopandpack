@@ -20,10 +20,5 @@ public interface IPack {
      */
     List<Sticker> getStickers();
     
-    /**
-     * Crea o inicializa el pack
-     * Este método permite la construcción del pack según el patrón Factory
-     */
-    void crear();
 }
 

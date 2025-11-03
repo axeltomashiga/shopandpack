@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Setter;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Entity
 @Data
@@ -47,21 +46,4 @@ public class UserSticker {
         this.sticker = sticker;
     }
     
-    // Método de negocio para cambiar estado
-    public void cambiarEstado(Estado nuevoEstado) {
-        this.estado = nuevoEstado;
-    }
-    
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UserSticker that = (UserSticker) o;
-        return Objects.equals(id, that.id);
-    }
-    
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

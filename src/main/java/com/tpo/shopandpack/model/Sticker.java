@@ -5,8 +5,6 @@ import com.tpo.shopandpack.emun.Rareza;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.Objects;
-
 @Entity
 @Data
 @Table(name = "stickers")
@@ -51,28 +49,10 @@ public class Sticker {
         this.imagenUrl = imagenUrl;
     }
 
-    public boolean reducirStock(int cantidad) {
-        if (stockDisponible >= cantidad) {
-            stockDisponible -= cantidad;
-            return true;
-        }
-        return false;
-    }
+    // La reducción de stock ahora se realiza a través de StickerStockService
+    // mediante operaciones atómicas en el repositorio para evitar race conditions.
 
     public boolean estaDisponible() {
         return stockDisponible > 0;
-    }
-    
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Sticker sticker = (Sticker) o;
-        return Objects.equals(id, sticker.id);
-    }
-    
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
     }
 }

@@ -5,11 +5,9 @@ import com.tpo.shopandpack.model.Pack;
 import com.tpo.shopandpack.model.Sticker;
 import com.tpo.shopandpack.model.Album;
 import com.tpo.shopandpack.model.User;
-import com.tpo.shopandpack.model.UserSticker;
 import com.tpo.shopandpack.repository.AlbumRepository;
 import com.tpo.shopandpack.repository.PackageRepository;
 import com.tpo.shopandpack.repository.UserRepository;
-import com.tpo.shopandpack.repository.UserStickerRepository;
 import com.tpo.shopandpack.repository.StickerRepository;
 import com.tpo.shopandpack.exepcion.BadRequestException;
 import com.tpo.shopandpack.exepcion.NotStickersAvailable;
@@ -42,10 +40,13 @@ public class TiendaService {
     private StickerRepository stickerRepository;
 
     @Autowired
-    private UserStickerRepository userStickerRepository;
+    private PackService packService;
 
     @Autowired
     private PagoService pagoService;
+    
+    @Autowired
+    private PackFactory packFactory;
     
     
     public PackDTO comprarPaquete(Long albumId, ComprarPackRequestDTO request) {
@@ -71,24 +72,20 @@ public class TiendaService {
 
         List<Sticker> stickers = stickersSelectionStrategy.selectStickers(stickersDisponibles);
         
-        Pack pack = new Pack(user, album);
-        pack.crear();
-        pack.setStickers(stickers);
+        // Crear el pack ya inicializado con sus figuritas a través de la factory
+        Pack pack = packFactory.createPack(user, album, stickers);
 
-        // 1. PRIMERO: Guardar el pack para que tenga ID
-        packageRepository.save(pack);
-        
-        // 2. SEGUNDO: Procesar el pago (ahora el pack ya tiene ID)
-        pagoService.procesarPago(pack, request);
-        
-        // 3. TERCERO: Guardar stickers y relaciones
-        stickerRepository.saveAll(stickers);
+    // 1. PRIMERO: Guardar el pack para que tenga ID
+    packageRepository.save(pack);
 
-        userStickerRepository.saveAll(
-            stickers.stream()
-                .map(sticker -> new UserSticker(user, sticker))
-                .toList()
-        );
+    // 1.1 Guardar stickers y pack (obtener IDs en stickers) antes del pago
+    packService.saveStickersAndPack(pack);
+
+    // 2. SEGUNDO: Procesar el pago (ahora los stickers tienen IDs y podemos decrementar stock)
+    pagoService.procesarPago(pack, request);
+
+    // 3. TERCERO: Crear las relaciones user↔sticker una vez el pago fue procesado
+    packService.persistUserStickerRelations(pack);
 
         PackDTO packDTO = new PackDTO(pack);
         return packDTO;
