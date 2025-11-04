@@ -30,7 +30,7 @@ public class TiendaServiceTest {
 
         when(packageRepository.findById(1L)).thenReturn(Optional.of(pack));
 
-        Double precio = tiendaService.obtenerPrecio(1L, 25); // 25% de descuento
+        Double precio = tiendaService.obtenerPrecio(1L, 25, 0); // 25% de descuento
 
         assertEquals(150.00, precio);
     }

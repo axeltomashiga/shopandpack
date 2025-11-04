@@ -5,12 +5,15 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import com.tpo.shopandpack.decorator.IPackDecorator;
+
 import lombok.Data;
 
 @Entity
 @Data
 @Table(name = "packs")
-public class Pack {
+public class Pack implements IPackDecorator{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,23 +63,6 @@ public class Pack {
         this.precio = precio;
     }
 
-    // Método personalizado para getStickers que mantiene la immutabilidad
-    public List<Sticker> getStickers() { 
-        return new ArrayList<>(stickers); 
-    }
-
-    // Método de negocio para obtener el precio (componente base del patrón Decorator)
-    public Double getPrecio() {
-        return this.precio;
-    }
-    
-    // Método para establecer el precio
-    public void setPrecio(Double precio) {
-        if (precio < 0) {
-            throw new IllegalArgumentException("El precio no puede ser negativo");
-        }
-        this.precio = precio;
-    }
 
     @Override
     public boolean equals(Object o) {

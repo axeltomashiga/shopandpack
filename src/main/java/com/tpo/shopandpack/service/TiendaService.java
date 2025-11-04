@@ -1,5 +1,7 @@
 package com.tpo.shopandpack.service;
 
+import com.tpo.shopandpack.decorator.IPackDecorator;
+import com.tpo.shopandpack.decorator.PackEspecial;
 import com.tpo.shopandpack.decorator.PackPromo;
 import com.tpo.shopandpack.model.Pack;
 import com.tpo.shopandpack.model.Sticker;
@@ -82,11 +84,11 @@ public class TiendaService {
      * @param descuento Porcentaje de descuento
      * @return Precio con descuento
      */
-    public Double obtenerPrecio(Long packId, int descuento) {
+    public Double obtenerPrecio(Long packId, int descuento, int multiplicador) {
         Pack pack = packageRepository.findById(packId)
                 .orElseThrow(() -> new BadRequestException("Pack no encontrado"));
-        
-        PackPromo packPromo = new PackPromo(pack, descuento);
+
+        IPackDecorator packPromo = new PackPromo(new PackEspecial(pack, multiplicador), descuento);
         return packPromo.getPrecio();
     }
 }

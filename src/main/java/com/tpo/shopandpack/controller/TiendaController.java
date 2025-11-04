@@ -38,18 +38,21 @@ public class TiendaController {
      * Endpoint para obtener el precio de un pack con descuento aplicado si corresponde
      * @param packId ID del pack
      * @param descuento Porcentaje de descuento (query param)
+     * @param multiplicador Porcentaje de multiplicador (query param)
      * @return Información de precios
      */
     @GetMapping("/albums/{packId}/price")
     public ResponseEntity<?> obtenerPrecio(
             @PathVariable Long packId,
-            @RequestParam(defaultValue = "0") int descuento) {
-        
-        Double precio = tiendaService.obtenerPrecio(packId, descuento);
-        
+            @RequestParam(defaultValue = "0") int descuento,
+            @RequestParam(defaultValue = "0") int multiplicador) {
+
+        Double precio = tiendaService.obtenerPrecio(packId, descuento, multiplicador);
+
         Map<String, Object> response = new HashMap<>();
         response.put("packId", packId);
         response.put("descuentoAplicado", descuento + "%");
+        response.put("multiplicadorAplicado", multiplicador + "%");
         response.put("precioFinal", precio);
         
         return ResponseEntity.status(HttpStatus.OK).body(response);
