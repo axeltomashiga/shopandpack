@@ -53,6 +53,7 @@ public class TiendaController {
         response.put("packId", packId);
         response.put("descuentoAplicado", descuento + "%");
         response.put("multiplicadorAplicado", multiplicador + "%");
+        response.put("precioOriginal", tiendaService.obtenerPrecio(packId, 0, 0));
         response.put("precioFinal", precio);
         
         return ResponseEntity.status(HttpStatus.OK).body(response);
