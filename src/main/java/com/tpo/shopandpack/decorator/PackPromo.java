@@ -60,17 +60,6 @@ public class PackPromo extends Pack {
         return pack.getStickers();
     }
     
-
-    /**
-     * Obtiene el monto del descuento aplicado
-     * @return El monto en pesos del descuento
-     */
-    public Double getMontoDescuento() {
-        Double precioOriginal = pack.getPrecio();
-        Double monto = precioOriginal * descuento;
-        return Math.round(monto * 100.0) / 100.0; // Redondear a 2 decimales
-    }
-    
     /**
      * Obtiene el porcentaje de descuento
      * @return El descuento como porcentaje (0-100)
@@ -79,13 +68,6 @@ public class PackPromo extends Pack {
         return (double) Math.round(descuento * 100.0);
     }
     
-    /**
-     * Obtiene el pack original sin decorar
-     * @return El pack base
-     */
-    public Pack getPackOriginal() {
-        return pack;
-    }
     
     @Override
     public String toString() {
