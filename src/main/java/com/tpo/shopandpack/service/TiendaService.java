@@ -5,17 +5,16 @@ import com.tpo.shopandpack.model.Pack;
 import com.tpo.shopandpack.model.Sticker;
 import com.tpo.shopandpack.model.Album;
 import com.tpo.shopandpack.model.User;
-import com.tpo.shopandpack.repository.AlbumRepository;
-import com.tpo.shopandpack.repository.PackageRepository;
-import com.tpo.shopandpack.repository.UserRepository;
-import com.tpo.shopandpack.repository.StickerRepository;
+import com.tpo.shopandpack.repository.*;
 import com.tpo.shopandpack.exepcion.BadRequestException;
 import com.tpo.shopandpack.exepcion.NotStickersAvailable;
 import com.tpo.shopandpack.emun.Estrategia;
 import com.tpo.shopandpack.Strategy.IStickerSelectionStrategy;
 import com.tpo.shopandpack.FactoryPack;
 import com.tpo.shopandpack.dto.PackDTO;
+import com.tpo.shopandpack.dto.StickerDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class TiendaService {
+
+    @Autowired
+    private UserStickerRepository userStickerRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -89,4 +91,18 @@ public class TiendaService {
         PackPromo packPromo = new PackPromo(pack, descuento);
         return packPromo.getPrecio();
     }
+
+    public List <StickerDTO> obtenerStickers() {
+        return stickerRepository.findAll().stream().map(StickerDTO::new).toList();
+    }
+
+    public List<StickerDTO> obtenerStickersUserAlbum(Long userId, Long albumId) {
+        List<Sticker> stickers = userStickerRepository.findByUserId(userId);
+        stickers = (albumId != null) ? 
+            stickerRepository.findByStickersAlbumId(stickers, albumId) : 
+            stickers;
+        
+        return stickers.stream().map(StickerDTO::new).toList();
+    }
+
 }

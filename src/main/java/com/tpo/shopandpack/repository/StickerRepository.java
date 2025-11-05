@@ -28,4 +28,10 @@ public interface StickerRepository extends JpaRepository<Sticker, Long>{
     @Transactional
     @Query("UPDATE Sticker s SET s.stockDisponible = s.stockDisponible - 1 WHERE s.id = :stickerId AND s.stockDisponible > 0")
     int reducirStock(@Param("stickerId") Long stickerId);
+
+    @Query("SELECT s FROM Sticker s WHERE s IN :stickers AND s.album.id = :albumId")
+    List<Sticker> findByStickersAlbumId(@Param("stickers") List<Sticker> stickers, @Param("albumId") Long albumId);
+
+
+    List<Sticker> findByAlbumId(Long albumId);
 }

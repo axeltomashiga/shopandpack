@@ -11,7 +11,7 @@ public class PackPromoTest {
         Pack pack = new Pack();
         pack.setPrecio(100.00);
 
-        PackPromo promo = new PackPromo(pack, 20); // 20%
+        Pack promo = new PackPromo(pack, 20); // 20%
 
         assertEquals(80.00, promo.getPrecio());
     }

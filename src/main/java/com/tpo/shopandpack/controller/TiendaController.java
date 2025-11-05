@@ -1,13 +1,16 @@
 package com.tpo.shopandpack.controller;
 
 import com.tpo.shopandpack.dto.PackDTO;
+import com.tpo.shopandpack.dto.StickerDTO;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.tpo.shopandpack.service.TiendaService;
@@ -52,6 +55,30 @@ public class TiendaController {
         response.put("descuentoAplicado", descuento + "%");
         response.put("precioFinal", precio);
         
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/albums/stickers")
+    public ResponseEntity<?> obtenerStickers() {
+        List<StickerDTO> stickers = tiendaService.obtenerStickers();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("stickers", stickers);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/albums/stickers/user/album")
+    public ResponseEntity<?> obtenerStickersUserAlbum(
+            @RequestParam(required = true) Long userId,
+            @RequestParam(required = false) Long albumId) {
+
+        List<StickerDTO> stickers = tiendaService.obtenerStickersUserAlbum(userId, albumId);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("userId", userId);
+        response.put("stickers", stickers);
+
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
