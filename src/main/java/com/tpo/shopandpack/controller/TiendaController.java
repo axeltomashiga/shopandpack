@@ -71,9 +71,23 @@ public class TiendaController {
     @GetMapping("/albums/stickers/user/album")
     public ResponseEntity<?> obtenerStickersUserAlbum(
             @RequestParam(required = true) Long userId,
-            @RequestParam(required = false) Long albumId) {
+            @RequestParam(required = true) Long albumId) {
 
         List<StickerDTO> stickers = tiendaService.obtenerStickersUserAlbum(userId, albumId);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("userId", userId);
+        response.put("albumId", albumId);
+        response.put("stickers", stickers);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/albums/{userId}/stickers")
+    public ResponseEntity<?> obtenerStickersUserAlbum(
+            @PathVariable Long userId) {
+
+        List<StickerDTO> stickers = tiendaService.obtenerStickersUserAlbum(userId, null);
 
         Map<String, Object> response = new HashMap<>();
         response.put("userId", userId);

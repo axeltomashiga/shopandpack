@@ -104,5 +104,4 @@ public class TiendaService {
         
         return stickers.stream().map(StickerDTO::new).toList();
     }
-
 }
