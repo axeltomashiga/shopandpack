@@ -58,7 +58,11 @@ public class TiendaController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping("/albums/stickers")
+    /**
+     * Endpoint para todos los stickers disponibles
+     * @return lista de stickers
+     */
+    @GetMapping("/albums/stickers/all")
     public ResponseEntity<?> obtenerStickers() {
         List<StickerDTO> stickers = tiendaService.obtenerStickers();
 
@@ -68,7 +72,13 @@ public class TiendaController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping("/albums/stickers/user/album")
+    /**
+     * Endpoint para obtener los stickers de un usuario en un álbum específico
+     * @param userId ID del usuario
+     * @param albumId ID del álbum (opcional)
+     * @return lista de stickers del usuario en el álbum
+     */
+    @GetMapping("/albums/stickers")
     public ResponseEntity<?> obtenerStickersUserAlbum(
             @RequestParam(required = true) Long userId,
             @RequestParam(required = true) Long albumId) {
@@ -83,7 +93,12 @@ public class TiendaController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping("/albums/{userId}/stickers")
+    /**
+     * Endpoint para obtener los stickers de un usuario en todos sus álbumes
+     * @variable userId ID del usuario
+     * @return lista de stickers del usuario
+     */
+    @GetMapping("/albums/stickers/user/{userId}")
     public ResponseEntity<?> obtenerStickersUser(
             @PathVariable Long userId) {
 
@@ -96,11 +111,16 @@ public class TiendaController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping("/albums/stickers/albums/{userId}")
-    public ResponseEntity<?> obtenerAlbumsDeStickers(
+    /**
+     * Endpoint para obtener los álbumes de un usuario
+     * @variable userId ID del usuario
+     * @return lista de álbumes del usuario
+     */
+    @GetMapping("/albums/user/{userId}")
+    public ResponseEntity<?> obtenerAlbumsDeUser(
             @PathVariable Long userId) {
 
-        List<?> albums = tiendaService.obtenerAlbumsDeStickers(userId);
+        List<?> albums = tiendaService.obtenerAlbumsDeUser(userId);
 
         Map<String, Object> response = new HashMap<>();
         response.put("userId", userId);

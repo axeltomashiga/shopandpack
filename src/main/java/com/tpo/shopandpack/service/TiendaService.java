@@ -105,7 +105,7 @@ public class TiendaService {
         return stickers.stream().map(StickerDTO::new).toList();
     }
 
-    public List<AlbumDTO> obtenerAlbumsDeStickers(Long userId) {
+    public List<AlbumDTO> obtenerAlbumsDeUser(Long userId) {
         List<Sticker> stickers = userStickerRepository.findByUserId(userId);
         return stickerRepository.findDistinctAlbumsByStickers(stickers).stream().map(AlbumDTO::new).toList();
     }
