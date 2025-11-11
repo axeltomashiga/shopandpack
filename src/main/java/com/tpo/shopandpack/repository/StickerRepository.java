@@ -1,5 +1,6 @@
 package com.tpo.shopandpack.repository;
 
+import com.tpo.shopandpack.model.Album;
 import com.tpo.shopandpack.model.Sticker;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -34,4 +35,7 @@ public interface StickerRepository extends JpaRepository<Sticker, Long>{
 
 
     List<Sticker> findByAlbumId(Long albumId);
+
+    @Query("SELECT DISTINCT s.album FROM Sticker s WHERE s IN :stickers")
+    List<Album> findDistinctAlbumsByStickers(@Param("stickers") List<Sticker> stickers);
 }

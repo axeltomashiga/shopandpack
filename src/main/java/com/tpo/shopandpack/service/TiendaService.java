@@ -11,10 +11,10 @@ import com.tpo.shopandpack.exepcion.NotStickersAvailable;
 import com.tpo.shopandpack.emun.Estrategia;
 import com.tpo.shopandpack.Strategy.IStickerSelectionStrategy;
 import com.tpo.shopandpack.FactoryPack;
+import com.tpo.shopandpack.dto.AlbumDTO;
 import com.tpo.shopandpack.dto.PackDTO;
 import com.tpo.shopandpack.dto.StickerDTO;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,5 +103,10 @@ public class TiendaService {
             stickers;
         
         return stickers.stream().map(StickerDTO::new).toList();
+    }
+
+    public List<AlbumDTO> obtenerAlbumsDeStickers(Long userId) {
+        List<Sticker> stickers = userStickerRepository.findByUserId(userId);
+        return stickerRepository.findDistinctAlbumsByStickers(stickers).stream().map(AlbumDTO::new).toList();
     }
 }
