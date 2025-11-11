@@ -95,4 +95,17 @@ public class TiendaController {
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+    @GetMapping("/albums/stickers/albums/{userId}")
+    public ResponseEntity<?> obtenerAlbumsDeStickers(
+            @PathVariable Long userId) {
+
+        List<?> albums = tiendaService.obtenerAlbumsDeStickers(userId);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("userId", userId);
+        response.put("albums", albums);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 }
