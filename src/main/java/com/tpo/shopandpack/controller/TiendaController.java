@@ -84,7 +84,7 @@ public class TiendaController {
     }
 
     @GetMapping("/albums/{userId}/stickers")
-    public ResponseEntity<?> obtenerStickersUserAlbum(
+    public ResponseEntity<?> obtenerStickersUser(
             @PathVariable Long userId) {
 
         List<StickerDTO> stickers = tiendaService.obtenerStickersUserAlbum(userId, null);

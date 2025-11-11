@@ -11,6 +11,7 @@ import com.tpo.shopandpack.exepcion.NotStickersAvailable;
 import com.tpo.shopandpack.emun.Estrategia;
 import com.tpo.shopandpack.Strategy.IStickerSelectionStrategy;
 import com.tpo.shopandpack.FactoryPack;
+import com.tpo.shopandpack.dto.AlbumDTO;
 import com.tpo.shopandpack.dto.PackDTO;
 import com.tpo.shopandpack.dto.StickerDTO;
 
@@ -104,8 +105,8 @@ public class TiendaService {
         return stickers.stream().map(StickerDTO::new).toList();
     }
 
-    public List<Album> obtenerAlbumsDeStickers(Long userId) {
+    public List<AlbumDTO> obtenerAlbumsDeStickers(Long userId) {
         List<Sticker> stickers = userStickerRepository.findByUserId(userId);
-        return stickerRepository.findDistinctAlbumsByStickers(stickers);
+        return stickerRepository.findDistinctAlbumsByStickers(stickers).stream().map(AlbumDTO::new).toList();
     }
 }
