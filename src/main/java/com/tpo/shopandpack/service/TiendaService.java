@@ -10,11 +10,12 @@ import com.tpo.shopandpack.exepcion.BadRequestException;
 import com.tpo.shopandpack.exepcion.NotStickersAvailable;
 import com.tpo.shopandpack.emun.Estrategia;
 import com.tpo.shopandpack.Strategy.IStickerSelectionStrategy;
+import com.tpo.shopandpack.adapter.IPago;
 import com.tpo.shopandpack.FactoryPack;
 import com.tpo.shopandpack.dto.AlbumDTO;
 import com.tpo.shopandpack.dto.PackDTO;
 import com.tpo.shopandpack.dto.StickerDTO;
-
+import java.util.Map;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,10 +42,10 @@ public class TiendaService {
     private StickerRepository stickerRepository;
 
     @Autowired
-    private PagoService pagoService;
+    private Map<String, IPago> metodosPago;
     
     
-    public PackDTO comprarPaquete(Long albumId, Long userId) {
+    public PackDTO comprarPaquete(Long albumId, Long userId,String metodoPago) {
 
         User user = userRepository.findById(userId).orElseThrow(() -> new BadRequestException("Usuario no encontrado"));
 
@@ -71,7 +72,8 @@ public class TiendaService {
        
         packageRepository.save(pack);
 
-        pagoService.procesar(pack);
+        IPago pagoService = metodosPago.get(metodoPago);
+        pagoService.pagar(pack);
 
         PackDTO packDTO = new PackDTO(pack);
         return packDTO;

@@ -31,9 +31,10 @@ public class TiendaController {
     @PostMapping("/albums/{albumId}/packs")
     public ResponseEntity<?> comprarPaquete(
         @PathVariable(required = true) Long albumId, 
-        @RequestParam(required = true) Long userId
+        @RequestParam(required = true) Long userId,
+        @RequestParam(defaultValue = "efectivo") String metodoPago
     ){
-        PackDTO pack = tiendaService.comprarPaquete(albumId, userId);
+        PackDTO pack = tiendaService.comprarPaquete(albumId, userId, metodoPago);
         return ResponseEntity.status(HttpStatus.CREATED).body(pack);
     }
 
