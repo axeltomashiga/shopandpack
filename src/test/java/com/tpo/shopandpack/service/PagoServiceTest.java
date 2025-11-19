@@ -1,5 +1,6 @@
 package com.tpo.shopandpack.service;
 
+import com.tpo.shopandpack.adapter.IPago;
 import com.tpo.shopandpack.model.Pack;
 import com.tpo.shopandpack.model.Sticker;
 import com.tpo.shopandpack.repository.PackageRepository;
@@ -7,6 +8,7 @@ import com.tpo.shopandpack.repository.PagoRepository;
 import com.tpo.shopandpack.repository.StickerRepository;
 import com.tpo.shopandpack.repository.UserStickerRepository;
 import com.tpo.shopandpack.emun.Rareza;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,6 +33,12 @@ public class PagoServiceTest {
 
     @Mock
     private StickerRepository stickerRepository;
+    
+    @Mock
+    private Map<String, IPago> metodosPago;
+
+    @Mock
+    private IPago pagoEfectivo;
 
     @InjectMocks
     private PagoService pagoService;
@@ -44,6 +52,9 @@ public class PagoServiceTest {
 
     // We verify that the service attempts to reduce stock via repository calls.
     pack.setStickers(List.of(s1, s2));
+
+    // Ensure the mock payment method is returned to avoid NPE inside PagoService
+    when(metodosPago.get("efectivo")).thenReturn(pagoEfectivo);
 
     pagoService.procesar(pack, "efectivo");
 
