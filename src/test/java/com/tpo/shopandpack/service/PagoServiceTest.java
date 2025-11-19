@@ -45,7 +45,7 @@ public class PagoServiceTest {
     // We verify that the service attempts to reduce stock via repository calls.
     pack.setStickers(List.of(s1, s2));
 
-    pagoService.procesar(pack);
+    pagoService.procesar(pack, "efectivo");
 
     // Expect two calls (one per sticker) to reducirStock. Use any() because stickers have no IDs in this unit test.
     verify(stickerRepository, times(2)).reducirStock(any());

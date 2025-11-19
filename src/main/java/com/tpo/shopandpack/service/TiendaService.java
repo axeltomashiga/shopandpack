@@ -40,9 +40,9 @@ public class TiendaService {
 
     @Autowired
     private StickerRepository stickerRepository;
-
+    
     @Autowired
-    private Map<String, IPago> metodosPago;
+    private PagoService pagoService;
     
     
     public PackDTO comprarPaquete(Long albumId, Long userId,String metodoPago) {
@@ -72,8 +72,7 @@ public class TiendaService {
        
         packageRepository.save(pack);
 
-        IPago pagoService = metodosPago.get(metodoPago);
-        pagoService.pagar(pack);
+        pagoService.procesar(pack, metodoPago);
 
         PackDTO packDTO = new PackDTO(pack);
         return packDTO;

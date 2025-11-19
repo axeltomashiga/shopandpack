@@ -1,10 +1,12 @@
 package com.tpo.shopandpack.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tpo.shopandpack.adapter.IPago;
 import com.tpo.shopandpack.model.Pack;
 import com.tpo.shopandpack.model.Pago;
 import com.tpo.shopandpack.model.Sticker;
@@ -28,10 +30,15 @@ public class PagoService {
 
     @Autowired
     private StickerRepository stickerRepository;
+
+    @Autowired
+    private Map<String, IPago> metodosPago;
     
-    public void procesar(Pack pack) {
+    public void procesar(Pack pack, String metodoPago) {
         User user = pack.getUser();
         Pago pago = new Pago(pack, user);
+
+        
 
         List<Sticker> stickers = pack.getStickers();
 
@@ -44,6 +51,9 @@ public class PagoService {
         for (Sticker sticker : stickers) {
             stickerRepository.reducirStock(sticker.getId());
         }
+
+        IPago pagoInterface = metodosPago.get(metodoPago);
+        pagoInterface.pagar(pack);
 
         pagoRepository.save(pago);
     }
